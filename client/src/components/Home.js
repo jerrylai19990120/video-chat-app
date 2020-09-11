@@ -18,6 +18,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Room from "./Room";
+import chatBg from '../images/chatBg.png'
 
 
 
@@ -69,7 +70,8 @@ const CreateRoom = (props) => {
                     </AppBar>
                 </div>
                 <div style={{height:"85.5%", width:'100%', backgroundColor:'#36393F'}}>
-                    {(props.showVideo)? <Room />: ''}
+                    <img src={chatBg} alt={""} style={{width:"50%", marginLeft:'2%', marginTop:'6%'}}/><br/>
+                    <span style={{color:'#B7B9BC', marginLeft:'2%'}}>Looks like no one's here yet......</span>
                 </div>
                 <div style={{width:'100%'}}>
                     <BottomNavigation
