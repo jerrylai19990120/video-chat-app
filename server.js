@@ -1,10 +1,19 @@
 require("dotenv").config()
 const express = require("express");
+const bodyParser = require('body-parser');
 const http = require("http");
 const app = express();
 const server = http.createServer(app);
 const socket = require("socket.io");
 const io = socket(server);
+
+const {mongoose} = require('./db/mongoose');
+mongoose.set('useFindAndModify', false);
+
+const {ObjectID} = require('mongodb');
+const {User} = require('./models/user')
+const session = require('express-session');
+const bcrypt = require('bcryptjs')
 
 const rooms = {};
 
@@ -41,6 +50,67 @@ if(process.env.PROD){
         res.sendFile(__dirname+'/client/build/index.html')
     })
 }
+
+app.use(bodyParser.json());
+app.use(
+    session({
+        resave: false,
+        saveUninitialized: false,
+        secret: 'oursecret',
+        cookie:{
+            httpOnly:true,
+            expires: 60000
+        }
+    })
+);
+
+app.get('/loginAuth', (req, res)=>{
+    User.find().then((users)=>{
+        if(!users){
+            res.status(404)
+        }else{
+            res.send(users)
+        }
+    })
+    .catch(error => {
+        console.log(error)
+    })
+})
+
+app.post('/signup', (req, res)=>{
+    if(mongoose.connection.readyState != 1){
+		console.log("mongoose connection error");
+		res.status(500).send("Internal server error");
+		return;
+    }
+    
+    bcrypt.genSalt(10, (err, salt)=>{
+        bcrypt.hash(req.body.password, salt, function(err, hash){
+            const user = new User({
+                username: req.body.username,
+                email: req.body.email,
+                passsword: hash
+            })
+            req.session.username = req.body.username;
+            req.session.email = req.body.email;
+
+            user.save().then(result => {
+                res.send(result);
+            }).catch(err => console.log(err))
+        })
+    })
+    
+})
+
+app.get('/check-session', (req, res)=>{
+    if(req.session.username){
+        res.send({currentUser: req.session.email});
+    }else{
+        res.status(401).send();
+    }
+})
+
+
 
 const port = process.env.PORT || 8000;
 server.listen(port, () => console.log(`server is running on port ${port}`));
