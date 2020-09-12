@@ -8,24 +8,21 @@ class Login extends React.Component{
 
     render(){
         return(
-            <div style={{height:'100vh', width:'100vw', backgroundColor:'#47C5E3'}}>
-                <div>
-                    <h1 style={{}}>Welcome to Vivideo!</h1>
-                    <h2>Join our diverse users community.</h2>
-                </div>
-                
+            <div style={{backgroundColor:'#F8C955', padding:"26vh", height:'343px'}}>
+                <h1 style={{color:'white'}}>Welcome to Vivideo!</h1>
+                <h2 style={{color:'white'}}>Join our diverse users community.</h2>
                 <form>
-                    <TextField id="standard-basic" label="Username" /><br/>
+                    <TextField id="standard-basic" label="Username"/><br/>
                     <TextField
                         id="standard-password-input"
                         label="Password"
                         type="password"
                         autoComplete="current-password"
                     /><br/>
-                    <Button variant="contained" color="primary">
+                    <Button variant="contained" color="primary" style={{width:"16%", height:'4vh', marginTop:'2vh'}}>
                         Log in
-                    </Button><br/>
-                    <span>or <a href="/signup" style={{textDecoration:'none', color:'white'}}>Sign up</a> to join our community.</span>
+                    </Button><br/><br/>
+                    <span style={{color:'#6F6F6F'}}>or <a href="/signup" style={{textDecoration:'none', color:'white'}}><strong>Sign up</strong></a> to join our community.</span>
                 </form>
             </div>
         )

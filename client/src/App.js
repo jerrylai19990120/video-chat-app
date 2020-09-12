@@ -7,19 +7,30 @@ import SignUp from './components/signup';
 import './App.css';
 
 
-function App() {
-  return (
-    <div className="App">
-      <BrowserRouter>
-        <Switch>
-          <Route path="/" exact component={Login} />
-          <Route path="/signup" component={SignUp} />
-          <Route path="/home" exact component={CreateRoom} />
-          <Route path="/room/:roomID" component={Room} />
-        </Switch>
-      </BrowserRouter>
-    </div>
-  );
+class App extends React.Component{
+
+  constructor(props){
+    super(props);
+    this.state = {
+      currentUser: null
+    }
+  }
+  
+  render(){
+    return (
+      <div className="App">
+        <BrowserRouter>
+          <Switch>
+            <Route path="/" exact component={Login} />
+            <Route path="/signup" render={()=><SignUp app={this}/>} />
+            <Route path="/home" exact component={CreateRoom} />
+            <Route path="/room/:roomID" component={Room} />
+          </Switch>
+        </BrowserRouter>
+      </div>
+    );
+  }
+  
 }
 
 export default App;
