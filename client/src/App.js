@@ -21,9 +21,9 @@ class App extends React.Component{
       <div className="App">
         <BrowserRouter>
           <Switch>
-            <Route path="/signup" render={()=><SignUp app={this}/>} />
             <Route path="/room/:roomID" component={Room} />
             <Route exact path={['/', '/home', '/room/:roomID']} render={()=>(!this.state.currentUser?<Login app={this}/>:<CreateRoom/>)}/>
+            <Route exact path="/signup" render={()=>(!this.state.currentUser?<SignUp app={this}/>:<CreateRoom/>)}/>
           </Switch>
         </BrowserRouter>
       </div>
