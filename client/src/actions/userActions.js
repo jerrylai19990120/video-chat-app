@@ -3,14 +3,18 @@ export const login = () => {
 
 }
 
-export const signUp = (app) => {
+export const signUp = (info, app) => {
+
+    const username = info.state.username;
+    const email = info.state.email;
+    const password = info.state.password;
 
     const request = new Request('/signup', {
         method:'post',
         body: JSON.stringify({
-            username: 'ferf',
-            email: 'fefr',
-            password: 'ferfer'
+            username: username,
+            email: email,
+            password: password
         }),
         headers: {
             Accept: "application/json, text/plain, */*",
