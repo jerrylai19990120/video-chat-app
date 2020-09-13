@@ -16,9 +16,6 @@ class SignUp extends React.Component{
         }
     }
 
-    getTextValue(e){
-        this.setState({username: e.target.value})
-    }
 
     render(){
         return(
@@ -30,9 +27,9 @@ class SignUp extends React.Component{
                 <form>
                     <TextField required id="standard-required" label="Username" onChange={(event)=>{this.setState({username: event.target.value})}}/><br/>
                     <TextField required id="standard-required" label="Email address" onChange={(event)=>{this.setState({email: event.target.value})}}/><br/>
-                    <TextField required id="standard-required" label="Password" onChange={(event)=>{this.setState({password: event.target.value})}}/><br/>
-                    <TextField required id="standard-required" label="Confirm password" onChange={(event)=>{this.setState({confirm: event.target.value})}}/><br/><br/>
-                    <Button variant="contained" color="primary" onClick={signUp(this, this.props.app)}>
+                    <TextField required id="standard-required" label="Password" type='password' onChange={(event)=>{this.setState({password: event.target.value})}}/><br/>
+                    <TextField required id="standard-required" label="Confirm password" type='password' onChange={(event)=>{this.setState({confirm: event.target.value})}}/><br/><br/>
+                    <Button variant="contained" color="primary" onClick={()=> {signUp(this, this.props.app)}}>
                         Join our community!
                     </Button><br/><br/>
                     <span style={{color:'#6F6F6F'}}>Already have an account? <a href='/' style={{textDecoration:'none', color:'white'}}><strong>Log in</strong></a></span>

@@ -102,6 +102,18 @@ app.post('/signup', (req, res)=>{
     
 })
 
+app.post('/loginSession', (req, res)=>{
+
+    const username = req.body.username;
+
+    User.findByUsername(username).then(user => {
+        req.session.username = user.username;
+        req.session.email = user.email;
+        res.send({currentUser: req.session.username});
+    })
+    .catch(err => {console.log(err)})
+})
+
 app.get('/check-session', (req, res)=>{
     if(req.session.username){
         res.send({currentUser: req.session.email});

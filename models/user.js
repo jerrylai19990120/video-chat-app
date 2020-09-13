@@ -30,6 +30,19 @@ const UserSchema = new mongoose.Schema({
     }
 })
 
+UserSchema.statics.findByUsername = function(username){
+    const currentUser = this;
+    return currentUser.findOne({username: username}).then(user => {
+        return new Promise((resolve, reject)=>{
+            if(user){
+                resolve(user);
+            }else{
+                reject();
+            }
+        })
+    })
+}
+
 const User = mongoose.model('User', UserSchema);
 
 module.exports = {User};
