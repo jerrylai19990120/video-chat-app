@@ -89,7 +89,7 @@ app.post('/signup', (req, res)=>{
             const user = new User({
                 username: req.body.username,
                 email: req.body.email,
-                passsword: hash
+                password: hash
             })
             req.session.username = req.body.username;
             req.session.email = req.body.email;
