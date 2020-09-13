@@ -21,7 +21,6 @@ export const login = (info, app) => {
             return result.json();
         })
         .then(json => {
-
             for(let i=0;i<json.length;i++){
                 bcrypt.compare(password, json[i].password, (err, res)=>{
                     if(json[i].username === username && res === true){
