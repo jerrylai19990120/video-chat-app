@@ -8,7 +8,6 @@ import ListItemText from '@material-ui/core/ListItemText';
 import List from '@material-ui/core/List';
 import VideoCallIcon from '@material-ui/icons/VideoCall';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
-import Grid from '@material-ui/core/Grid';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import VideocamOffIcon from '@material-ui/icons/VideocamOff';

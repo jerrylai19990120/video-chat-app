@@ -8,7 +8,6 @@ import ListItemText from '@material-ui/core/ListItemText';
 import List from '@material-ui/core/List';
 import VideoCallIcon from '@material-ui/icons/VideoCall';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
-import Grid from '@material-ui/core/Grid';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import VideocamOffIcon from '@material-ui/icons/VideocamOff';
@@ -17,7 +16,6 @@ import MicOffIcon from '@material-ui/icons/MicOff';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import Room from "./Room";
 import chatBg from '../images/chatBg.png'
 
 
@@ -26,9 +24,9 @@ import chatBg from '../images/chatBg.png'
 const CreateRoom = (history) => {
     function create() {
         const id = uuid();
-        history.push(`/room/${id}`);
+        history.push(`/home/room/${id}`);
     }
-    
+
     return (
         <div style={{height:"100vh", width:'100vw'}}>
             <div style={{height:'100%', width:'12.6%', float:'left'}}>
