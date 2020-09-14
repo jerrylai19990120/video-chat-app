@@ -23,10 +23,10 @@ import chatBg from '../images/chatBg.png'
 
 
 
-const CreateRoom = (props) => {
+const CreateRoom = (history) => {
     function create() {
         const id = uuid();
-        props.history.push(`/room/${id}`);
+        history.push(`/room/${id}`);
     }
     
     return (
