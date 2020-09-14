@@ -72,3 +72,21 @@ export const signUp = (info, app) => {
 
 
 }
+
+export const readCookie = (app)=>{
+
+    fetch('/check-session')
+        .then(result => {
+            if(result.status===200){
+                return result.json();
+            }
+        })
+        .then(json => {
+            if(json && json.currentUser){
+                app.setState({currentUser: json.currentUser});
+            }
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}

@@ -6,12 +6,14 @@ import Login from './components/login';
 import SignUp from './components/signup';
 import './App.css';
 import {useHistory} from 'react-router-dom';
+import {readCookie} from "./actions/userActions";
 
 
 class App extends React.Component{
 
   constructor(props){
     super(props);
+    readCookie(this);
     this.state = {
       currentUser: null
     }
