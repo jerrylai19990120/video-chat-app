@@ -27,6 +27,7 @@ const CreateRoom = (history) => {
         history.push(`/home/room/${id}`);
     }
 
+
     return (
         <div style={{height:"100vh", width:'100vw'}}>
             <div style={{height:'100%', width:'12.6%', float:'left'}}>
