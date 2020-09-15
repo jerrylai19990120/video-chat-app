@@ -64,6 +64,7 @@ const CreateRoom = (history) => {
                             <Tab label="Chat" />
                             <Tab label="Video" />
                             <Tab label="Find Friends" />
+                            <Tab label="Friend Requests" />
                             <Tab label="Profile" />
                         </Tabs>
                     </AppBar>

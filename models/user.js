@@ -8,6 +8,17 @@ const FriendSchema = new mongoose.Schema({
     }
 })
 
+const RequestSchema = new mongoose.Schema({
+    username: {
+        type: String,
+        required: true
+    },
+    accepted: {
+        type: Boolean,
+        required: true
+    }
+})
+
 const UserSchema = new mongoose.Schema({
 
     username:{

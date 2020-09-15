@@ -32,7 +32,7 @@ export const login = (info, app) => {
                                 }
                             })
                             .catch(error => {
-                                console.log(err)
+                                console.log(error)
                             })
                     }
                 })
