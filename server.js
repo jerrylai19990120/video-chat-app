@@ -74,6 +74,7 @@ app.get('/loginAuth', (req, res)=>{
     })
     .catch(error => {
         console.log(error)
+        res.status(500).send()
     })
 })
 
@@ -111,7 +112,10 @@ app.post('/loginSession', (req, res)=>{
         req.session.email = user.email;
         res.send({currentUser: req.session.username});
     })
-    .catch(err => {console.log(err)})
+    .catch(err => {
+        console.log(err)
+        res.status(400).send()
+    })
 })
 
 app.get('/check-session', (req, res)=>{

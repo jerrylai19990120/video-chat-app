@@ -8,7 +8,7 @@ export const login = (info, app) => {
     const request = new Request('/loginSession', {
         method: 'post',
         body: JSON.stringify({
-            username: username
+            username: info.state.username
         }),
         headers: {
             Accept: 'application/json, text/plain, */*',
