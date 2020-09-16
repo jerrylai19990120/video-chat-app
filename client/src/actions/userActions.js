@@ -2,8 +2,6 @@ const bcrypt = require('bcryptjs');
 
 export const login = (info, app) => {
 
-    const username = info.state.username;
-    const password = info.state.password;
 
     const request = new Request('/loginSession', {
         method: 'post',
@@ -21,6 +19,9 @@ export const login = (info, app) => {
             return result.json();
         })
         .then(json => {
+            const username = info.state.username;
+            const password = info.state.password;
+
             for(let i=0;i<json.length;i++){
                 bcrypt.compare(password, json[i].password, (err, res)=>{
                     if(json[i].username === username && res === true){

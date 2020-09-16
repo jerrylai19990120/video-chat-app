@@ -44,22 +44,16 @@ io.on("connection", socket => {
     });
 });
 
-if(process.env.PROD){
-    app.use(express.static(__dirname+"/client/build"));
-    app.get('*', (req, res)=>{
-        res.sendFile(__dirname+'/client/build/index.html')
-    })
-}
 
 app.use(bodyParser.json());
 app.use(
     session({
+        secret: 'oursecret',
         resave: false,
         saveUninitialized: false,
-        secret: 'oursecret',
         cookie:{
-            httpOnly:true,
-            expires: 60000
+            expires: 60000,
+            httpOnly:true
         }
     })
 );
@@ -140,3 +134,8 @@ app.get('/logout', (req, res)=>{
 
 const port = process.env.PORT || 8000;
 server.listen(port, () => console.log(`server is running on port ${port}`));
+
+app.use(express.static(__dirname+"/client/build"));
+app.get('*', (req, res)=>{
+    res.sendFile(__dirname+'/client/build/index.html')
+})
