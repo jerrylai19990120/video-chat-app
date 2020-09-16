@@ -16,12 +16,15 @@ import MicOffIcon from '@material-ui/icons/MicOff';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import chatBg from '../images/chatBg.png'
+import chatBg from '../images/chatBg.png';
+import Button from '@material-ui/core/Button';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import {logOut} from '../actions/userActions';
 
 
 
 
-const CreateRoom = (history) => {
+const CreateRoom = (history, app) => {
     function create() {
         const id = uuid();
         history.push(`/home/room/${id}`);
@@ -53,6 +56,12 @@ const CreateRoom = (history) => {
                         <ListItem style={{cursor: "pointer"}}>
                             <ListItemIcon><AccountBoxIcon/></ListItemIcon>
                             <ListItemText primary='Allen'/>
+                        </ListItem><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+                        <ListItem style={{cursor: "pointer"}}>
+                            <ListItemIcon><ExitToAppIcon/></ListItemIcon>
+                            <Button variant="outlined" color="primary" onClick={()=>{history.push('/');logOut(app)}}>
+                                Log out
+                            </Button>
                         </ListItem>
                     </List>
                 </Drawer>

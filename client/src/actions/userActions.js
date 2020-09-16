@@ -90,3 +90,16 @@ export const readCookie = (app)=>{
             console.log(err)
         })
 }
+
+export const logOut = (app) => {
+    app.setState({currentUser: null});
+    fetch('/logout')
+        .then(res => {
+            if(res.status === 200){
+                res.send()
+            }
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}

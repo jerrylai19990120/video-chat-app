@@ -126,6 +126,16 @@ app.get('/check-session', (req, res)=>{
     }
 })
 
+app.get('/logout', (req, res)=>{
+    req.session.destroy(error => {
+        if(error){
+            res.status(500).send()
+        }else{
+            res.send()
+        }
+    })
+})
+
 
 
 const port = process.env.PORT || 8000;
