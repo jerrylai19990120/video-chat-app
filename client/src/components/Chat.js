@@ -1,5 +1,6 @@
 import React from "react";
-import { v1 as uuid } from "uuid";
+import {useEffect, useState, useRef} from 'react';
+import io from "socket.io-client";
 import Drawer from '@material-ui/core/Drawer';
 import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
@@ -23,15 +24,44 @@ import Tabs from "@material-ui/core/Tabs";
 
 
 
+const Chat = ()=>{
+    const [yourID, setYourID] = useState();
+    const [messages, setMessages] = useState([]);
+    const [message, setMessage] = useState("");
 
-const CreateRoom = (history, app) => {
-    function create() {
-        const id = uuid();
-        history.push(`/home/room/${id}`);
+    const socketRef = useRef();
+    useEffect(()=>{
+        socketRef.current = io.connect('/');
+
+        socketRef.current.on("your ID", (id)=>{
+            setYourID(id)
+        })
+
+        socketRef.current.on("message", message=>{
+            receiveMessage(message);
+        })
+    }, []);
+
+    function receiveMessage(message){
+        setMessages(oldMessages => [...oldMessages, message]);
     }
 
+    function sendMessage(e){
+        e.preventDefault();
+        const newMessage = {
+            body: message,
+            id: yourID
+        }
+        setMessage("");
+        socketRef.current.emit("send message", newMessage);
+    }
 
-    return (
+    function handleChange(e){
+        e.preventDefault();
+        setMessage(e.target.value);
+    }
+
+    return(
         <div style={{height:"100vh", width:'100vw'}}>
             <div style={{height:'100%', width:'12.6%', float:'left'}}>
                 <Drawer
@@ -40,7 +70,7 @@ const CreateRoom = (history, app) => {
                     >
                     <Divider />
                     <List>
-                        <ListItem style={{cursor: "pointer"}} onClick={create}>
+                        <ListItem style={{cursor: "pointer"}}>
                             <ListItemIcon><VideoCallIcon/></ListItemIcon>
                             <ListItemText primary='Create Room'/>
                         </ListItem>
@@ -62,7 +92,7 @@ const CreateRoom = (history, app) => {
                         </ListItem><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
                         <ListItem style={{cursor: "pointer"}}>
                             <ListItemIcon><ExitToAppIcon/></ListItemIcon>
-                            <Button variant="outlined" color="primary" onClick={()=>{history.push('/');logOut(app)}}>
+                            <Button variant="outlined" color="primary">
                                 Log out
                             </Button>
                         </ListItem>
@@ -71,19 +101,30 @@ const CreateRoom = (history, app) => {
             </div>
             <div style={{height: "100%", width:'87.4%', float:'left'}}>
                 <div style={{height:"6.6%", width:'100%'}}>
+                    
                     <AppBar position="static">
-                        <Tabs aria-label="simple tabs example" centered={true}>
-                            <Tab label="Chat" value={1}/>
-                            <Tab label="Video" />
-                            <Tab label="Find Friends" />
-                            <Tab label="Friend Requests" />
-                            <Tab label="Profile" />
-                        </Tabs>
+                    <Tabs aria-label="simple tabs example" centered={true}>
+                        <Tab label="Chat" value={1}/>
+                        <Tab label="Video" />
+                        <Tab label="Find Friends" />
+                        <Tab label="Friend Requests" />
+                        <Tab label="Profile" />
+                    </Tabs>
                     </AppBar>
+                    
+                    
                 </div>
                 <div style={{height:"85.5%", width:'100%', backgroundColor:'#36393F'}}>
-                    <img src={chatBg} alt={""} style={{width:"50%", marginLeft:'2%', marginTop:'6%'}}/><br/>
-                    <span style={{color:'#B7B9BC', marginLeft:'2%'}}>Looks like no one's here yet......</span>
+                    {messages.map((message, index)=>{
+                        return(
+                        <p>{message.body}</p>
+                        )
+                    })}
+                    <form onSubmit={sendMessage}>
+                        <textarea placeholder="type..." onChange={handleChange} value={message}/>
+                        <button>send</button>
+                    </form>
+
                 </div>
                 <div style={{width:'100%'}}>
                     <BottomNavigation
@@ -96,7 +137,7 @@ const CreateRoom = (history, app) => {
                 </div>
             </div>
         </div>
-    )
+    );
 }
 
-export default CreateRoom;
+export default Chat;
