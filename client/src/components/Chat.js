@@ -16,11 +16,14 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import MicOffIcon from '@material-ui/icons/MicOff';
 import AppBar from '@material-ui/core/AppBar';
 import Tab from '@material-ui/core/Tab';
-import chatBg from '../images/chatBg.png';
+import profilePic from '../images/profilePic.jpg';
 import Button from '@material-ui/core/Button';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import {logOut} from '../actions/userActions';
 import Tabs from "@material-ui/core/Tabs";
+import SendIcon from '@material-ui/icons/Send';
+import TextField from '@material-ui/core/TextField';
+import Avatar from '@material-ui/core/Avatar';
 
 
 
@@ -115,16 +118,45 @@ const Chat = ()=>{
                     
                 </div>
                 <div style={{height:"85.5%", width:'100%', backgroundColor:'#36393F'}}>
-                    {messages.map((message, index)=>{
-                        return(
-                        <p>{message.body}</p>
-                        )
-                    })}
-                    <form onSubmit={sendMessage}>
-                        <textarea placeholder="type..." onChange={handleChange} value={message}/>
-                        <button>send</button>
-                    </form>
-
+                    <div style={{width:'100%', height:'80%'}}>
+                        {messages.map((message, index)=>{
+                            return(
+                                <div>
+                                    <Avatar alt="user" src={profilePic} />
+                                    <TextField
+                                        id="outlined-textarea"
+                                        multiline
+                                        variant="outlined"
+                                        disabled
+                                        value={message.body}
+                                    >
+                                    </TextField><br/>
+                                </div>
+                                
+                            )
+                        })}
+                    </div>
+                    <div style={{width:'100%', height:'20%'}}>
+                        <TextField
+                            id="outlined-multiline-static"
+                            label="Say something"
+                            multiline
+                            rows={1}
+                            variant="outlined"
+                            onChange={handleChange}
+                            value={message}
+                            InputProps={{color:'white'}}
+                        />
+                        <Button
+                                variant="contained"
+                                color="primary"
+                                endIcon={<SendIcon/>}
+                                onClick={sendMessage}
+                        >
+                            Send
+                        </Button>
+                        
+                    </div>
                 </div>
                 <div style={{width:'100%'}}>
                     <BottomNavigation
