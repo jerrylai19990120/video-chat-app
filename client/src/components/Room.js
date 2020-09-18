@@ -16,7 +16,9 @@ import MicOffIcon from '@material-ui/icons/MicOff';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-
+import Button from '@material-ui/core/Button';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import {logOut} from '../actions/userActions';
 
 
 
@@ -139,19 +141,21 @@ const Room = (props) => {
     };
 
     return (
-
         <div style={{height:"100vh", width:'100vw'}}>
             <div style={{height:'100%', width:'12.6%', float:'left'}}>
                 <Drawer
                     variant="permanent"
                     anchor="left"
                     >
-                    
                     <Divider />
                     <List>
                         <ListItem style={{cursor: "pointer"}}>
                             <ListItemIcon><VideoCallIcon/></ListItemIcon>
                             <ListItemText primary='Create Room'/>
+                        </ListItem>
+                        <ListItem style={{cursor: "pointer"}}>
+                            <ListItemIcon><AccountBoxIcon/></ListItemIcon>
+                            <ListItemText primary='Join Room'/>
                         </ListItem>
                         <ListItem style={{cursor: "pointer"}}>
                             <ListItemIcon><AccountBoxIcon/></ListItemIcon>
@@ -164,6 +168,12 @@ const Room = (props) => {
                         <ListItem style={{cursor: "pointer"}}>
                             <ListItemIcon><AccountBoxIcon/></ListItemIcon>
                             <ListItemText primary='Allen'/>
+                        </ListItem><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+                        <ListItem style={{cursor: "pointer"}}>
+                            <ListItemIcon><ExitToAppIcon/></ListItemIcon>
+                            <Button variant="outlined" color="primary">
+                                Log out
+                            </Button>
                         </ListItem>
                     </List>
                 </Drawer>
@@ -172,20 +182,21 @@ const Room = (props) => {
                 <div style={{height:"6.6%", width:'100%'}}>
                     <AppBar position="static">
                         <Tabs aria-label="simple tabs example" centered={true}>
-                            <Tab label="Chat" />
+                            <Tab label="Chat"/>
                             <Tab label="Video" />
                             <Tab label="Find Friends" />
+                            <Tab label="Friend Requests" />
                             <Tab label="Profile" />
                         </Tabs>
                     </AppBar>
                 </div>
                 <div style={{height:"85.5%", width:'100%', backgroundColor:'#36393F'}}>
                     <div style={{height:"100%", width:"100%"}}>
-                        <video autoPlay ref={userVideo} style={{height:'49%', width:'100%', border:'2px solid gray'}}/>
-                        <video autoPlay ref={partnerVideo} style={{height:'49%', width:'100%', border:'2px solid gray'}}/>
+                        <video autoPlay ref={userVideo} style={{height:'49%', width:'98%', border:'2px solid gray'}}/>
+                        <video autoPlay ref={partnerVideo} style={{height:'49%', width:'98%', border:'2px solid gray'}}/>
                     </div>
                 </div>
-                <div style={{width:'100%', height:'7.9%'}}>
+                <div style={{width:'100%'}}>
                     <BottomNavigation
                         showLabels
                         >
@@ -196,7 +207,6 @@ const Room = (props) => {
                 </div>
             </div>
         </div>
-        
     );
 };
 

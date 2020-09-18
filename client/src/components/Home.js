@@ -59,7 +59,7 @@ const CreateRoom = (history, app) => {
                         <ListItem style={{cursor: "pointer"}}>
                             <ListItemIcon><AccountBoxIcon/></ListItemIcon>
                             <ListItemText primary='Allen'/>
-                        </ListItem><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+                        </ListItem><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
                         <ListItem style={{cursor: "pointer"}}>
                             <ListItemIcon><ExitToAppIcon/></ListItemIcon>
                             <Button variant="outlined" color="primary" onClick={()=>{history.push('/');logOut(app)}}>
@@ -73,7 +73,7 @@ const CreateRoom = (history, app) => {
                 <div style={{height:"6.6%", width:'100%'}}>
                     <AppBar position="static">
                         <Tabs aria-label="simple tabs example" centered={true}>
-                            <Tab label="Chat" value={1}/>
+                            <Tab label="Chat" onClick={()=>{history.push(`/chat/${uuid()}`)}}/>
                             <Tab label="Video" />
                             <Tab label="Find Friends" />
                             <Tab label="Friend Requests" />

@@ -24,6 +24,8 @@ import Tabs from "@material-ui/core/Tabs";
 import SendIcon from '@material-ui/icons/Send';
 import TextField from '@material-ui/core/TextField';
 import Avatar from '@material-ui/core/Avatar';
+import {makeStyles} from '@material-ui/core/styles';
+import {v1 as uuid} from 'uuid';
 
 
 
@@ -64,6 +66,16 @@ const Chat = ()=>{
         setMessage(e.target.value);
     }
 
+    const useStyles = makeStyles((theme)=>({
+        textField: {
+            border:'1px solid gray',
+            backgroundColor: 'white',
+            borderRadius: '8px'
+        }
+    }))
+
+    const classes = useStyles();
+
     return(
         <div style={{height:"100vh", width:'100vw'}}>
             <div style={{height:'100%', width:'12.6%', float:'left'}}>
@@ -92,7 +104,7 @@ const Chat = ()=>{
                         <ListItem style={{cursor: "pointer"}}>
                             <ListItemIcon><AccountBoxIcon/></ListItemIcon>
                             <ListItemText primary='Allen'/>
-                        </ListItem><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+                        </ListItem><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
                         <ListItem style={{cursor: "pointer"}}>
                             <ListItemIcon><ExitToAppIcon/></ListItemIcon>
                             <Button variant="outlined" color="primary">
@@ -107,31 +119,47 @@ const Chat = ()=>{
                     
                     <AppBar position="static">
                     <Tabs aria-label="simple tabs example" centered={true}>
-                        <Tab label="Chat" value={1}/>
+                        <Tab label="Chat"/>
                         <Tab label="Video" />
                         <Tab label="Find Friends" />
                         <Tab label="Friend Requests" />
                         <Tab label="Profile" />
                     </Tabs>
                     </AppBar>
-                    
-                    
                 </div>
                 <div style={{height:"85.5%", width:'100%', backgroundColor:'#36393F'}}>
-                    <div style={{width:'100%', height:'80%'}}>
-                        {messages.map((message, index)=>{
+                    <div style={{width:'100%', height:'80%', overflow: 'auto'}}>
+                        {messages.map((message)=>{
+                            if(message.id === yourID){
+                                return(
+                                    <section style={{width:'100%', float:'right', marginTop:'16px'}}>
+                                        <TextField
+                                            id="outlined-textarea"
+                                            multiline
+                                            variant="outlined"
+                                            disabled
+                                            value={message.body}
+                                            style={{float:'right', marginRight:'26px'}}
+                                            className={classes.textField}
+                                        >
+                                        </TextField>
+                                    </section>
+                                )
+                            }
                             return(
-                                <div>
-                                    <Avatar alt="user" src={profilePic} />
+                                <section style={{width:'100%', float:'left', marginTop:'16px'}}>
+                                    <Avatar alt="user" src={profilePic} style={{float:'left', marginLeft:'26px', marginTop:'0px'}}/>
                                     <TextField
                                         id="outlined-textarea"
                                         multiline
                                         variant="outlined"
                                         disabled
                                         value={message.body}
+                                        style={{float:'left', marginLeft:'10px'}}
+                                        className={classes.textField}
                                     >
-                                    </TextField><br/>
-                                </div>
+                                    </TextField>
+                                </section>
                                 
                             )
                         })}
@@ -145,13 +173,15 @@ const Chat = ()=>{
                             variant="outlined"
                             onChange={handleChange}
                             value={message}
-                            InputProps={{color:'white'}}
+                            className={classes.textField}
+                            style={{marginTop:'36px', marginLeft:'54px'}}
                         />
                         <Button
                                 variant="contained"
                                 color="primary"
                                 endIcon={<SendIcon/>}
                                 onClick={sendMessage}
+                                style={{marginTop:'46px', marginLeft:'20px'}}
                         >
                             Send
                         </Button>
