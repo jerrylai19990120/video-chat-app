@@ -42,6 +42,12 @@ io.on("connection", socket => {
     socket.on("ice-candidate", incoming => {
         io.to(incoming.target).emit("ice-candidate", incoming.candidate);
     });
+
+    socket.emit("your ID", socket.id);
+
+    socket.on("send message", body => {
+        io.emit("message", body);
+    })
 });
 
 
