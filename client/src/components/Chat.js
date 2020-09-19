@@ -106,6 +106,12 @@ const Chat = (history)=>{
         return window.location.pathname.slice(6);
     }
 
+    function create() {
+        const id = shortid.generate();
+        history.push(`/home/room/${id}`);
+    }
+
+
     const classes = useStyles();
 
     return(
@@ -119,7 +125,7 @@ const Chat = (history)=>{
                     <List>
                         <ListItem style={{cursor: "pointer"}}>
                             <ListItemIcon><VideoCallIcon/></ListItemIcon>
-                            <ListItemText primary='Create Room'/>
+                            <ListItemText primary='Create Room' onClick={create}/>
                         </ListItem>
                         <ListItem style={{cursor: "pointer"}}>
                             <ListItemIcon><AccountBoxIcon/></ListItemIcon>

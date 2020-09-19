@@ -160,7 +160,7 @@ const Room = (props) => {
 
     function join(history){
         if(selected){
-            history.push(`/room/${roomID}`)
+            history.push(`/home/room/${roomID}`)
         }else{
             history.push(`/chat/${roomID}`);
         }
@@ -175,8 +175,14 @@ const Room = (props) => {
     }
 
     const getRoomID = ()=>{
-        return window.location.pathname.slice(6);
+        return window.location.pathname.slice(11);
     }
+
+    function create() {
+        const id = shortid.generate();
+        history.push(`/home/room/${id}`);
+    }
+
 
     return (
         <div style={{height:"100vh", width:'100vw'}}>
@@ -189,7 +195,7 @@ const Room = (props) => {
                     <List>
                         <ListItem style={{cursor: "pointer"}}>
                             <ListItemIcon><VideoCallIcon/></ListItemIcon>
-                            <ListItemText primary='Create Room'/>
+                            <ListItemText primary='Create Room' onClick={create}/>
                         </ListItem>
                         <ListItem style={{cursor: "pointer"}}>
                             <ListItemIcon><AccountBoxIcon/></ListItemIcon>
