@@ -47,7 +47,7 @@ const CreateRoom = (history, app) => {
 
     function join(history){
         if(selected){
-            history.push(`/room/${roomID}`)
+            history.push(`/home/room/${roomID}`)
         }else{
             history.push(`/chat/${roomID}`);
         }
@@ -84,9 +84,9 @@ const CreateRoom = (history, app) => {
                                 aria-labelledby="simple-modal-title"
                                 aria-describedby="simple-modal-description"
                             >
-                                <div style={{width:'28vw', height:'38vh', backgroundColor:'white', marginLeft:'40vw', marginTop:'20vh'}}>
-                                    <h2>Join Meeting</h2><br/>
-                                    <TextField id="outlined-basic" label="Meeting id" variant="outlined" onChange={(e)=>{setRoomID(e.target.value)}}/><br/>
+                                <div style={{width:'28vw', height:'38vh', backgroundColor:'white', marginLeft:'40vw', marginTop:'20vh', padding:'2%'}}>
+                                    <h2 style={{color:'#556572'}}>Join Meeting</h2><br/>
+                                    <TextField id="outlined-basic" label="Meeting id" variant="outlined" onChange={(e)=>{setRoomID(e.target.value)}}/><br/><br/>
                                     <Radio
                                         checked={!selected}
                                         onChange={()=>{handleRadioChange(1)}}
@@ -94,9 +94,9 @@ const CreateRoom = (history, app) => {
                                     <Radio
                                         checked={selected}
                                         onChange={()=>{handleRadioChange(0)}}
-                                    />Video <br/>
-                                    <Button onClick={closePopUp} variant="outlined" color="primary">Cancel</Button>
-                                    <Button variant="outlined" color="primary" onClick={()=>{join(history)}}>Join</Button>
+                                    />Video <br/><br/>
+                                    <Button onClick={closePopUp} variant="outlined" color="primary" style={{marginLeft:'16%'}}>Cancel</Button>
+                                    <Button variant="outlined" color="primary" onClick={()=>{join(history)}} style={{marginLeft:'26%'}} disabled={(roomID==='')?true:false}>Join</Button>
                                 </div>
                             </Modal>
                         </ListItem>

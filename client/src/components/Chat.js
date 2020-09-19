@@ -28,7 +28,7 @@ import {makeStyles} from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import Radio from '@material-ui/core/Radio';
 
-
+const shortid = require('shortid');
 
 const Chat = (history)=>{
     const [yourID, setYourID] = useState();
@@ -80,7 +80,7 @@ const Chat = (history)=>{
 
     function join(history){
         if(selected){
-            history.push(`/room/${roomID}`)
+            history.push(`/home/room/${roomID}`)
         }else{
             history.push(`/chat/${roomID}`);
         }

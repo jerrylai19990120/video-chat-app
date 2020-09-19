@@ -24,7 +24,7 @@ import Radio from '@material-ui/core/Radio';
 import TextField from '@material-ui/core/TextField';
 import {useHistory} from 'react-router-dom';
 
-
+const shortid = require('shortid');
 
 const Room = (props) => {
     const userVideo = useRef();
