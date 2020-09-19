@@ -247,7 +247,7 @@ const Room = (props) => {
                 <div style={{height:"6.6%", width:'100%'}}>
                     <AppBar position="static">
                         <Tabs aria-label="simple tabs example" centered={true}>
-                            <Tab label={`Meeting ID: ${getRoomID()}`} />
+                            <button disabled={true} style={{color:'#ACB4DF', backgroundColor:'#3F51B5', border:'none', height:'46px'}}><strong>Meeting ID: {getRoomID()}</strong></button>
                             <Tab label="Chat"/>
                             <Tab label="Video" />
                             <Tab label="Find Friends" />
