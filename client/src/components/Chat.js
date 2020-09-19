@@ -102,6 +102,10 @@ const Chat = (history)=>{
         }
     }))
 
+    const getRoomID = ()=>{
+        return window.location.pathname.slice(6);
+    }
+
     const classes = useStyles();
 
     return(
@@ -168,6 +172,7 @@ const Chat = (history)=>{
                     
                     <AppBar position="static">
                     <Tabs aria-label="simple tabs example" centered={true}>
+                        <Tab label={`Meeting ID: ${getRoomID()}`} />
                         <Tab label="Chat"/>
                         <Tab label="Video" />
                         <Tab label="Find Friends" />

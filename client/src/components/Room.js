@@ -174,6 +174,10 @@ const Room = (props) => {
         }
     }
 
+    const getRoomID = ()=>{
+        return window.location.pathname.slice(6);
+    }
+
     return (
         <div style={{height:"100vh", width:'100vw'}}>
             <div style={{height:'100%', width:'12.6%', float:'left'}}>
@@ -237,6 +241,7 @@ const Room = (props) => {
                 <div style={{height:"6.6%", width:'100%'}}>
                     <AppBar position="static">
                         <Tabs aria-label="simple tabs example" centered={true}>
+                            <Tab label={`Meeting ID: ${getRoomID()}`} />
                             <Tab label="Chat"/>
                             <Tab label="Video" />
                             <Tab label="Find Friends" />
