@@ -25,14 +25,18 @@ import SendIcon from '@material-ui/icons/Send';
 import TextField from '@material-ui/core/TextField';
 import Avatar from '@material-ui/core/Avatar';
 import {makeStyles} from '@material-ui/core/styles';
-import {v1 as uuid} from 'uuid';
+import Modal from '@material-ui/core/Modal';
+import Radio from '@material-ui/core/Radio';
 
 
 
-const Chat = ()=>{
+const Chat = (history)=>{
     const [yourID, setYourID] = useState();
     const [messages, setMessages] = useState([]);
     const [message, setMessage] = useState("");
+    const [open, setOpen] = useState(false);
+    const [roomID, setRoomID] = useState('');
+    const [selected, setSelected] = useState(false);
 
     const socketRef = useRef();
     useEffect(()=>{
@@ -66,6 +70,30 @@ const Chat = ()=>{
         setMessage(e.target.value);
     }
 
+    function openPopUp(){
+        setOpen(true);
+    }
+
+    function closePopUp(){
+        setOpen(false);
+    }
+
+    function join(history){
+        if(selected){
+            history.push(`/room/${roomID}`)
+        }else{
+            history.push(`/chat/${roomID}`);
+        }
+    }
+
+    function handleRadioChange(val){
+        if(val){
+            setSelected(false);
+        }else{
+            setSelected(true)
+        }
+    }
+
     const useStyles = makeStyles((theme)=>({
         textField: {
             border:'1px solid gray',
@@ -91,7 +119,28 @@ const Chat = ()=>{
                         </ListItem>
                         <ListItem style={{cursor: "pointer"}}>
                             <ListItemIcon><AccountBoxIcon/></ListItemIcon>
-                            <ListItemText primary='Join Room'/>
+                            <ListItemText primary='Join Room' onClick={openPopUp}/>
+                            <Modal
+                                open={open}
+                                onClose={closePopUp}
+                                aria-labelledby="simple-modal-title"
+                                aria-describedby="simple-modal-description"
+                            >
+                                <div style={{width:'28vw', height:'38vh', backgroundColor:'white', marginLeft:'40vw', marginTop:'20vh', padding:'2%'}}>
+                                    <h2 style={{color:'#556572'}}>Join Meeting</h2><br/>
+                                    <TextField id="outlined-basic" label="Meeting id" variant="outlined" onChange={(e)=>{setRoomID(e.target.value)}}/><br/><br/>
+                                    <Radio
+                                        checked={!selected}
+                                        onChange={()=>{handleRadioChange(1)}}
+                                    />Chat&nbsp;&nbsp;&nbsp; 
+                                    <Radio
+                                        checked={selected}
+                                        onChange={()=>{handleRadioChange(0)}}
+                                    />Video <br/><br/>
+                                    <Button onClick={closePopUp} variant="outlined" color="primary" style={{marginLeft:'16%'}}>Cancel</Button>
+                                    <Button variant="outlined" color="primary" onClick={()=>{join(history)}} style={{marginLeft:'26%'}} disabled={(roomID==='')?true:false}>Join</Button>
+                                </div>
+                            </Modal>
                         </ListItem>
                         <ListItem style={{cursor: "pointer"}}>
                             <ListItemIcon><AccountBoxIcon/></ListItemIcon>

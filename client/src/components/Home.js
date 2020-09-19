@@ -1,5 +1,5 @@
 import React from "react";
-import { v1 as uuid } from "uuid";
+import {useState} from 'react';
 import Drawer from '@material-ui/core/Drawer';
 import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
@@ -20,14 +20,45 @@ import Button from '@material-ui/core/Button';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import {logOut} from '../actions/userActions';
 import Tabs from "@material-ui/core/Tabs";
+import Modal from '@material-ui/core/Modal';
+import TextField from '@material-ui/core/TextField';
+import Radio from '@material-ui/core/Radio';
 
-
+const shortid = require('shortid');
 
 
 const CreateRoom = (history, app) => {
+    const [open, setOpen] = useState(false);
+    const [roomID, setRoomID] = useState('');
+    const [selected, setSelected] = useState(false);
+
     function create() {
-        const id = uuid();
+        const id = shortid.generate();
         history.push(`/home/room/${id}`);
+    }
+
+    function openPopUp(){
+        setOpen(true);
+    }
+
+    function closePopUp(){
+        setOpen(false);
+    }
+
+    function join(history){
+        if(selected){
+            history.push(`/room/${roomID}`)
+        }else{
+            history.push(`/chat/${roomID}`);
+        }
+    }
+
+    function handleRadioChange(val){
+        if(val){
+            setSelected(false);
+        }else{
+            setSelected(true)
+        }
     }
 
 
@@ -46,7 +77,28 @@ const CreateRoom = (history, app) => {
                         </ListItem>
                         <ListItem style={{cursor: "pointer"}}>
                             <ListItemIcon><AccountBoxIcon/></ListItemIcon>
-                            <ListItemText primary='Join Room'/>
+                            <ListItemText primary='Join Room' onClick={openPopUp}/>
+                            <Modal
+                                open={open}
+                                onClose={closePopUp}
+                                aria-labelledby="simple-modal-title"
+                                aria-describedby="simple-modal-description"
+                            >
+                                <div style={{width:'28vw', height:'38vh', backgroundColor:'white', marginLeft:'40vw', marginTop:'20vh'}}>
+                                    <h2>Join Meeting</h2><br/>
+                                    <TextField id="outlined-basic" label="Meeting id" variant="outlined" onChange={(e)=>{setRoomID(e.target.value)}}/><br/>
+                                    <Radio
+                                        checked={!selected}
+                                        onChange={()=>{handleRadioChange(1)}}
+                                    />Chat&nbsp;&nbsp;&nbsp; 
+                                    <Radio
+                                        checked={selected}
+                                        onChange={()=>{handleRadioChange(0)}}
+                                    />Video <br/>
+                                    <Button onClick={closePopUp} variant="outlined" color="primary">Cancel</Button>
+                                    <Button variant="outlined" color="primary" onClick={()=>{join(history)}}>Join</Button>
+                                </div>
+                            </Modal>
                         </ListItem>
                         <ListItem style={{cursor: "pointer"}}>
                             <ListItemIcon><AccountBoxIcon/></ListItemIcon>
@@ -73,7 +125,7 @@ const CreateRoom = (history, app) => {
                 <div style={{height:"6.6%", width:'100%'}}>
                     <AppBar position="static">
                         <Tabs aria-label="simple tabs example" centered={true}>
-                            <Tab label="Chat" onClick={()=>{history.push(`/chat/${uuid()}`)}}/>
+                            <Tab label="Chat" onClick={()=>{history.push(`/chat/${shortid.generate()}`)}}/>
                             <Tab label="Video" />
                             <Tab label="Find Friends" />
                             <Tab label="Friend Requests" />
