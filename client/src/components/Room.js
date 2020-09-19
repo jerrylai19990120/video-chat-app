@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import io from "socket.io-client";
 import Drawer from '@material-ui/core/Drawer';
 import Divider from '@material-ui/core/Divider';
@@ -19,6 +19,10 @@ import Tab from '@material-ui/core/Tab';
 import Button from '@material-ui/core/Button';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import {logOut} from '../actions/userActions';
+import Modal from '@material-ui/core/Modal';
+import Radio from '@material-ui/core/Radio';
+import TextField from '@material-ui/core/TextField';
+import {useHistory} from 'react-router-dom';
 
 
 
@@ -29,6 +33,12 @@ const Room = (props) => {
     const socketRef = useRef();
     const otherUser = useRef();
     const userStream = useRef();
+
+
+    const history = useHistory();
+    const [open, setOpen] = useState(false);
+    const [roomID, setRoomID] = useState('');
+    const [selected, setSelected] = useState(false);
 
     useEffect(() => {
         navigator.mediaDevices.getUserMedia({ audio: true, video: true }).then(stream => {
@@ -140,6 +150,30 @@ const Room = (props) => {
         partnerVideo.current.srcObject = e.streams[0];
     };
 
+    function openPopUp(){
+        setOpen(true);
+    }
+
+    function closePopUp(){
+        setOpen(false);
+    }
+
+    function join(history){
+        if(selected){
+            history.push(`/room/${roomID}`)
+        }else{
+            history.push(`/chat/${roomID}`);
+        }
+    }
+
+    function handleRadioChange(val){
+        if(val){
+            setSelected(false);
+        }else{
+            setSelected(true)
+        }
+    }
+
     return (
         <div style={{height:"100vh", width:'100vw'}}>
             <div style={{height:'100%', width:'12.6%', float:'left'}}>
@@ -155,7 +189,28 @@ const Room = (props) => {
                         </ListItem>
                         <ListItem style={{cursor: "pointer"}}>
                             <ListItemIcon><AccountBoxIcon/></ListItemIcon>
-                            <ListItemText primary='Join Room'/>
+                            <ListItemText primary='Join Room' onClick={openPopUp}/>
+                            <Modal
+                                open={open}
+                                onClose={closePopUp}
+                                aria-labelledby="simple-modal-title"
+                                aria-describedby="simple-modal-description"
+                            >
+                                <div style={{width:'28vw', height:'38vh', backgroundColor:'white', marginLeft:'40vw', marginTop:'20vh', padding:'2%'}}>
+                                    <h2 style={{color:'#556572'}}>Join Meeting</h2><br/>
+                                    <TextField id="outlined-basic" label="Meeting id" variant="outlined" onChange={(e)=>{setRoomID(e.target.value)}}/><br/><br/>
+                                    <Radio
+                                        checked={!selected}
+                                        onChange={()=>{handleRadioChange(1)}}
+                                    />Chat&nbsp;&nbsp;&nbsp; 
+                                    <Radio
+                                        checked={selected}
+                                        onChange={()=>{handleRadioChange(0)}}
+                                    />Video <br/><br/>
+                                    <Button onClick={closePopUp} variant="outlined" color="primary" style={{marginLeft:'16%'}}>Cancel</Button>
+                                    <Button variant="outlined" color="primary" onClick={()=>{join(history)}} style={{marginLeft:'26%'}} disabled={(roomID==='')?true:false}>Join</Button>
+                                </div>
+                            </Modal>
                         </ListItem>
                         <ListItem style={{cursor: "pointer"}}>
                             <ListItemIcon><AccountBoxIcon/></ListItemIcon>
