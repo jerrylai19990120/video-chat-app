@@ -23,6 +23,10 @@ import Tabs from "@material-ui/core/Tabs";
 import Modal from '@material-ui/core/Modal';
 import TextField from '@material-ui/core/TextField';
 import Radio from '@material-ui/core/Radio';
+import Requests from './Requests';
+import Profile from './Profile';
+import FriendList from './FriendList';
+import FindFriends from './FindFriends';
 
 const shortid = require('shortid');
 
@@ -31,6 +35,7 @@ const CreateRoom = (history, app) => {
     const [open, setOpen] = useState(false);
     const [roomID, setRoomID] = useState('');
     const [selected, setSelected] = useState(false);
+    const [tabVal, setTabVal] = useState(0);
 
     function create() {
         const id = shortid.generate();
@@ -127,15 +132,28 @@ const CreateRoom = (history, app) => {
                         <Tabs aria-label="simple tabs example" centered={true}>
                             <Tab label="Chat" onClick={()=>{history.push(`/chat/${shortid.generate()}`)}}/>
                             <Tab label="Video" />
-                            <Tab label="Find Friends" />
-                            <Tab label="Friend Requests" />
-                            <Tab label="Profile" />
+                            <Tab label="Friends" onClick={()=>{setTabVal(1)}}/>
+                            <Tab label="Find Friends" onClick={()=>{setTabVal(2)}}/>
+                            <Tab label="Friend Requests" onClick={()=>{setTabVal(3)}}/>
+                            <Tab label="Profile" onClick={()=>{setTabVal(4)}}/>
                         </Tabs>
                     </AppBar>
                 </div>
-                <div style={{height:"85.5%", width:'100%', backgroundColor:'#36393F'}}>
+                <div style={{height:"85.5%", width:'100%', backgroundColor:'#36393F'}} hidden={tabVal!==0}>
                     <img src={chatBg} alt={""} style={{width:"50%", marginLeft:'2%', marginTop:'6%'}}/><br/>
                     <span style={{color:'#B7B9BC', marginLeft:'2%'}}>Looks like no one's here yet......</span>
+                </div>
+                <div style={{height: "85.5%", width:'100%', backgroundColor:'#36393F'}} hidden={tabVal!==1}>
+                    <FriendList/>
+                </div>
+                <div style={{height: "85.5%", width:'100%', backgroundColor:'#36393F'}} hidden={tabVal!==2}>
+                    <FindFriends />
+                </div>
+                <div style={{height: "85.5%", width:'100%', backgroundColor:'#36393F'}} hidden={tabVal!==3}>
+                    <Requests />
+                </div>
+                <div style={{height: "85.5%", width:'100%', backgroundColor:'#36393F'}} hidden={tabVal!==4}>
+                    <Profile />
                 </div>
                 <div style={{width:'100%'}}>
                     <BottomNavigation

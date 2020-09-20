@@ -11,7 +11,7 @@ const {mongoose} = require('./db/mongoose');
 mongoose.set('useFindAndModify', false);
 
 const {ObjectID} = require('mongodb');
-const {User} = require('./models/user')
+const {User} = require('./models/user');
 const session = require('express-session');
 const bcrypt = require('bcryptjs')
 
@@ -58,7 +58,7 @@ app.use(
         resave: false,
         saveUninitialized: false,
         cookie:{
-            expires: 60000,
+            expires: 600000,
             httpOnly:true
         }
     })
@@ -133,6 +133,107 @@ app.get('/logout', (req, res)=>{
         }else{
             res.send()
         }
+    })
+})
+
+//send a friend request
+app.put('/send-friend-request/:username/:sender', (req, res)=>{
+    const username = req.params.username;
+    const sender = req.params.sender;
+
+    User.findOneAndUpdate({username: username}, {"$push": {requests: {username: sender, accepted: false}}}, {new: true, useFindAndModify: false}).then(result => {
+        if(!result){
+            res.status(404).send();
+        }else{
+            res.send(result);
+        }
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).send();
+    })
+})
+
+//add a friend
+app.put('/acceptedFriend/:username/:sender', (req, res)=>{
+    const username = req.params.username;
+    const sender = req.params.sender;
+
+    User.findOneAndUpdate({username: username}, {"$push": {friends: {username: sender}}}, {new: true, useFindAndModify: false}).then(result => {
+        if(!result){
+            res.status(404).send();
+        }else{
+            res.send(result);
+        }
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).send();
+    })
+
+    User.findOneAndUpdate({username: sender}, {"$push": {friends: {username: username}}}, {new: true, useFindAndModify: false}).then(result => {
+        if(!result){
+            res.status(404).send();
+        }else{
+            res.send(result);
+        }
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).send();
+    })
+})
+
+//find a specific user
+app.post('/findAnUser', (req, res)=>{
+    const username = req.body.username;
+    User.findByUsername(username).then(result => {
+        if(!result){
+            res.status(404).send();
+        }else{
+            res.send(result);
+        }
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).send();
+    })
+})
+
+//remove friend
+app.put('/deleteFriend/:username/:friend', (req, res)=>{
+    const username = req.params.username;
+    const friend = req.params.friend;
+
+    User.findOneAndUpdate({username: username}, {"$pull": {friends: {"username": friend}}}, {new: true, useFindAndModify: false}).then(result => {
+        if(!result){
+            res.status(404).send();
+        }else{
+            res.send(result);
+        }
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).send();
+    })
+})
+
+
+//remove friend request
+app.put('/declinedFriend/:username/:friend', (req, res)=>{
+    const username = req.params.username;
+    const friend = req.params.friend;
+
+    User.findOneAndUpdate({username: username}, {"$pull": {requests: {"username": friend, "accepted": false}}}, {new: true, useFindAndModify: false}).then(result => {
+        if(!result){
+            res.status(404).send();
+        }else{
+            res.send(result);
+        }
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).send();
     })
 })
 

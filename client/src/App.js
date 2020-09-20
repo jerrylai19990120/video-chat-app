@@ -8,6 +8,7 @@ import './App.css';
 import {useHistory} from 'react-router-dom';
 import {readCookie} from "./actions/userActions";
 import Chat from './components/Chat';
+import FindFriends from './components/FindFriends';
 
 
 class App extends React.Component{
