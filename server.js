@@ -216,6 +216,18 @@ app.put('/deleteFriend/:username/:friend', (req, res)=>{
         console.log(err);
         res.status(500).send();
     })
+
+    User.findOneAndUpdate({username: friend}, {"$pull": {friends: {"username": username}}}, {new: true, useFindAndModify: false}).then(result => {
+        if(!result){
+            res.status(404).send();
+        }else{
+            res.send(result);
+        }
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).send();
+    })
 })
 
 
