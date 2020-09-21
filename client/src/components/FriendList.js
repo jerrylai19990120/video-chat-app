@@ -21,7 +21,7 @@ const FriendList = () => {
         const request = new Request('/findAnUser', {
             method: 'post',
             body: JSON.stringify({
-                username: 'jerrylai'
+                username: `${this.props.currUser}`
             }),
             headers: {
                 Accept: "application/json, text/plain, */*",
@@ -53,7 +53,7 @@ const FriendList = () => {
     getFriends();
 
     const removeFriend = (friend)=>{
-        fetch(`/deleteFriend/jerrylai/${friend}`, {method: 'put'})
+        fetch(`/deleteFriend/${this.props.currUser}/${friend}`, {method: 'put'})
             .then(result => {
                 if(result===200){
                     return result.json();

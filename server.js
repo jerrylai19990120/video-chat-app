@@ -120,7 +120,7 @@ app.post('/loginSession', (req, res)=>{
 
 app.get('/check-session', (req, res)=>{
     if(req.session.username){
-        res.send({currentUser: req.session.email});
+        res.send({currentUser: req.session.username});
     }else{
         res.status(401).send();
     }

@@ -25,7 +25,7 @@ export const login = (info, app) => {
             for(let i=0;i<json.length;i++){
                 bcrypt.compare(password, json[i].password, (err, res)=>{
                     if(json[i].username === username && res === true){
-                        app.setState({currentUser: json[i].email})
+                        app.setState({currentUser: json[i].username})
                         fetch(request)
                             .then(result => {
                                 if(result.status===200){
@@ -65,7 +65,7 @@ export const signUp = (info, app) => {
             }
         })
         .then(json => {
-            app.setState({currentUser: json.email})
+            app.setState({currentUser: json.username})
         })
         .catch(err => {
             console.log(err);

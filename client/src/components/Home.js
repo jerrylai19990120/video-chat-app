@@ -66,7 +66,6 @@ const CreateRoom = (history, app) => {
         }
     }
 
-
     return (
         <div style={{height:"100vh", width:'100vw'}}>
             <div style={{height:'100%', width:'12.6%', float:'left'}}>
@@ -144,16 +143,16 @@ const CreateRoom = (history, app) => {
                     <span style={{color:'#B7B9BC', marginLeft:'2%'}}>Looks like no one's here yet......</span>
                 </div>
                 <div style={{height: "85.5%", width:'100%', backgroundColor:'#36393F'}} hidden={tabVal!==1}>
-                    <FriendList/>
+                    <FriendList currUser={app.state.currentUser}/>
                 </div>
                 <div style={{height: "85.5%", width:'100%', backgroundColor:'#36393F'}} hidden={tabVal!==2}>
-                    <FindFriends />
+                    <FindFriends currUser={app.state.currentUser}/>
                 </div>
                 <div style={{height: "85.5%", width:'100%', backgroundColor:'#36393F'}} hidden={tabVal!==3}>
-                    <Requests />
+                    <Requests currUser={app.state.currentUser}/>
                 </div>
                 <div style={{height: "85.5%", width:'100%', backgroundColor:'#36393F'}} hidden={tabVal!==4}>
-                    <Profile />
+                    <Profile currUser={app.state.currentUser}/>
                 </div>
                 <div style={{width:'100%'}}>
                     <BottomNavigation

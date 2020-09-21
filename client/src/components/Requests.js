@@ -29,7 +29,7 @@ const Requests = () => {
         const request = new Request('/findAnUser', {
             method: 'post',
             body: JSON.stringify({
-                username: 'jerrylai'
+                username: `${this.props.currUser}`
             }),
             headers: {
                 Accept: "application/json, text/plain, */*",
@@ -52,12 +52,22 @@ const Requests = () => {
     }
     getRequests();
 
-    const handleFriendRequest = (username, sender,accepted)=>{
+    const handleFriendRequest = (username, sender, accepted)=>{
         if(accepted){
             fetch(`/acceptedFriend/${username}/${sender}`, {method:'put'})
                 .then(result => {
                     if(result.status===200){
                         return result.json();
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+
+            fetch(`/declinedFriend/${sender}/${username}`, {method: 'put'})
+                .then(result => {
+                    if(result.status===200){
+                        return result.json()
                     }
                 })
                 .catch(err => {
@@ -93,10 +103,10 @@ const Requests = () => {
                                 />
                                 <ListItemSecondaryAction>
                                 <IconButton edge="end" aria-label="send">
-                                        <CheckIcon className={classes.item} onClick={()=>{handleFriendRequest(req.username, "jerrylai", true)}}/>
+                                        <CheckIcon className={classes.item} onClick={()=>{handleFriendRequest(req.username, `${this.props.currUser}`, true)}}/>
                                     </IconButton>
                                     <IconButton edge="end" aria-label="send">
-                                        <HighlightOffIcon className={classes.item} onClick={()=>{handleFriendRequest("jerrylai", req.username, false)}}/>
+                                        <HighlightOffIcon className={classes.item} onClick={()=>{handleFriendRequest(`${this.props.currUser}`, req.username, false)}}/>
                                     </IconButton>
                                 </ListItemSecondaryAction>
                             </ListItem>

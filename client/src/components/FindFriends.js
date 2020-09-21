@@ -45,7 +45,7 @@ const FindFriends = () => {
 
 
     const sendFriendRequest = ()=>{
-        const request = new Request(`/send-friend-request/${result}/user`, {
+        const request = new Request(`/send-friend-request/${result}/${this.props.currUser}`, {
             method: 'put',
             headers: {
                 Accept: "application/json, text/plain, */*",
