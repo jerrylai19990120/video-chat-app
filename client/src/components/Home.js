@@ -105,18 +105,7 @@ const CreateRoom = (history, app) => {
                                 </div>
                             </Modal>
                         </ListItem>
-                        <ListItem style={{cursor: "pointer"}}>
-                            <ListItemIcon><AccountBoxIcon/></ListItemIcon>
-                            <ListItemText primary='Jerry'/>
-                        </ListItem>
-                        <ListItem style={{cursor: "pointer"}}> 
-                            <ListItemIcon><AccountBoxIcon/></ListItemIcon>
-                            <ListItemText primary='John'/>
-                        </ListItem>
-                        <ListItem style={{cursor: "pointer"}}>
-                            <ListItemIcon><AccountBoxIcon/></ListItemIcon>
-                            <ListItemText primary='Allen'/>
-                        </ListItem><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+                        <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
                         <ListItem style={{cursor: "pointer"}}>
                             <ListItemIcon><ExitToAppIcon/></ListItemIcon>
                             <Button variant="outlined" color="primary" onClick={()=>{history.push('/');logOut(app)}}>

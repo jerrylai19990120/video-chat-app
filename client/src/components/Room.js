@@ -23,6 +23,10 @@ import Modal from '@material-ui/core/Modal';
 import Radio from '@material-ui/core/Radio';
 import TextField from '@material-ui/core/TextField';
 import {useHistory} from 'react-router-dom';
+import Requests from './Requests';
+import Profile from './Profile';
+import FriendList from './FriendList';
+import FindFriends from './FindFriends';
 
 const shortid = require('shortid');
 
@@ -39,6 +43,7 @@ const Room = (props) => {
     const [open, setOpen] = useState(false);
     const [roomID, setRoomID] = useState('');
     const [selected, setSelected] = useState(false);
+    const [tabVal, setTabVal] = useState(0);
 
     useEffect(() => {
         navigator.mediaDevices.getUserMedia({ audio: true, video: true }).then(stream => {
@@ -46,7 +51,7 @@ const Room = (props) => {
             userStream.current = stream;
 
             socketRef.current = io.connect("/");
-            socketRef.current.emit("join room", props.match.params.roomID);
+            socketRef.current.emit("join room", getRoomID());
 
             socketRef.current.on('other user', userID => {
                 callUser(userID);
@@ -222,18 +227,7 @@ const Room = (props) => {
                                 </div>
                             </Modal>
                         </ListItem>
-                        <ListItem style={{cursor: "pointer"}}>
-                            <ListItemIcon><AccountBoxIcon/></ListItemIcon>
-                            <ListItemText primary='Jerry'/>
-                        </ListItem>
-                        <ListItem style={{cursor: "pointer"}}> 
-                            <ListItemIcon><AccountBoxIcon/></ListItemIcon>
-                            <ListItemText primary='John'/>
-                        </ListItem>
-                        <ListItem style={{cursor: "pointer"}}>
-                            <ListItemIcon><AccountBoxIcon/></ListItemIcon>
-                            <ListItemText primary='Allen'/>
-                        </ListItem><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+                        <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
                         <ListItem style={{cursor: "pointer"}}>
                             <ListItemIcon><ExitToAppIcon/></ListItemIcon>
                             <Button variant="outlined" color="primary"  onClick={logOut}>
@@ -248,19 +242,32 @@ const Room = (props) => {
                     <AppBar position="static">
                         <Tabs aria-label="simple tabs example" centered={true}>
                             <button disabled={true} style={{color:'#ACB4DF', backgroundColor:'#3F51B5', border:'none', height:'46px'}}><strong>Meeting ID: {getRoomID()}</strong></button>
-                            <Tab label="Chat"/>
-                            <Tab label="Video" />
-                            <Tab label="Find Friends" />
-                            <Tab label="Friend Requests" />
-                            <Tab label="Profile" />
+                            <Tab label="Chat" onClick={()=>{history.push(`/chat/${shortid.generate()}`)}}/>
+                            <Tab label="Video" onClick={()=>{setTabVal(0)}}/>
+                            <Tab label="Friends" onClick={()=>{setTabVal(1)}}/>
+                            <Tab label="Find Friends" onClick={()=>{setTabVal(2)}}/>
+                            <Tab label="Friend Requests" onClick={()=>{setTabVal(2)}}/>
+                            <Tab label="Profile" onClick={()=>{setTabVal(4)}}/>
                         </Tabs>
                     </AppBar>
                 </div>
-                <div style={{height:"85.5%", width:'100%', backgroundColor:'#36393F'}}>
+                <div style={{height:"85.5%", width:'100%', backgroundColor:'#36393F'}} hidden={tabVal!==0}>
                     <div style={{height:"100%", width:"100%"}}>
                         <video autoPlay ref={userVideo} style={{height:'49%', width:'98%', border:'2px solid gray'}}/>
                         <video autoPlay ref={partnerVideo} style={{height:'49%', width:'98%', border:'2px solid gray'}}/>
                     </div>
+                </div>
+                <div style={{height: "85.5%", width:'100%', backgroundColor:'#36393F'}} hidden={tabVal!==1}>
+                    <FriendList currUser={props.app.state.currentUser}/>
+                </div>
+                <div style={{height: "85.5%", width:'100%', backgroundColor:'#36393F'}} hidden={tabVal!==2}>
+                    <FindFriends currUser={props.app.state.currentUser}/>
+                </div>
+                <div style={{height: "85.5%", width:'100%', backgroundColor:'#36393F'}} hidden={tabVal!==3}>
+                    <Requests currUser={props.app.state.currentUser}/>
+                </div>
+                <div style={{height: "85.5%", width:'100%', backgroundColor:'#36393F'}} hidden={tabVal!==4}>
+                    <Profile currUser={props.app.state.currentUser}/>
                 </div>
                 <div style={{width:'100%'}}>
                     <BottomNavigation
