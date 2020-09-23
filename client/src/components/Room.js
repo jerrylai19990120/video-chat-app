@@ -236,7 +236,7 @@ const Room = (props) => {
                         </ListItem><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
                         <ListItem style={{cursor: "pointer"}}>
                             <ListItemIcon><ExitToAppIcon/></ListItemIcon>
-                            <Button variant="outlined" color="primary">
+                            <Button variant="outlined" color="primary"  onClick={logOut}>
                                 Log out
                             </Button>
                         </ListItem>

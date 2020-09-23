@@ -1,5 +1,5 @@
-import React from 'react';
-import {useState} from 'react';
+import React, { useEffect } from 'react';
+import {useState, useRef} from 'react';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
@@ -12,16 +12,19 @@ import {makeStyles} from '@material-ui/core/styles';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 
 
-const FriendList = () => {
+const FriendList = (props) => {
 
     const [friends, setFriends] = useState([]);
     const [hide, setHide] = useState(true);
+
+    const prevState = useRef();
+    
 
     function getFriends(){
         const request = new Request('/findAnUser', {
             method: 'post',
             body: JSON.stringify({
-                username: `${this.props.currUser}`
+                username: `${props.currUser}`
             }),
             headers: {
                 Accept: "application/json, text/plain, */*",
@@ -50,10 +53,10 @@ const FriendList = () => {
     }))
 
     const classes = useStyles();
-    getFriends();
+    
 
     const removeFriend = (friend)=>{
-        fetch(`/deleteFriend/${this.props.currUser}/${friend}`, {method: 'put'})
+        fetch(`/deleteFriend/${props.currUser}/${friend}`, {method: 'put'})
             .then(result => {
                 if(result===200){
                     return result.json();
@@ -63,6 +66,10 @@ const FriendList = () => {
                 console.log(err);
             })
     }
+
+    useEffect(()=>{
+        getFriends();
+    }, [])
 
     return(
         <div style={{width: '40%', height: '100%', overflowY: 'auto', paddingTop:'2vh', textAlign:'left', marginLeft:'30%'}}>

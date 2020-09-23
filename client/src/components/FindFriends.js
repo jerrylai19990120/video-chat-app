@@ -14,7 +14,7 @@ import SendIcon from '@material-ui/icons/Send';
 import {makeStyles} from '@material-ui/core/styles';
 
 
-const FindFriends = () => {
+const FindFriends = (props) => {
 
     const [result, setResult] = useState('');
     const [input, setInput] = useState('');
@@ -45,7 +45,7 @@ const FindFriends = () => {
 
 
     const sendFriendRequest = ()=>{
-        const request = new Request(`/send-friend-request/${result}/${this.props.currUser}`, {
+        const request = new Request(`/send-friend-request/${result}/${props.currUser}`, {
             method: 'put',
             headers: {
                 Accept: "application/json, text/plain, */*",
