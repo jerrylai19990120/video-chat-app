@@ -44,30 +44,36 @@ const Room = (props) => {
     const [roomID, setRoomID] = useState('');
     const [selected, setSelected] = useState(false);
     const [tabVal, setTabVal] = useState(0);
+    const [audioOnOff, setAudioOnOff] = useState(true);
+    const [videoOnOff, setVideoOnOff] = useState(true);
 
     useEffect(() => {
-        navigator.mediaDevices.getUserMedia({ audio: true, video: true }).then(stream => {
-            userVideo.current.srcObject = stream;
-            userStream.current = stream;
+        
+            navigator.mediaDevices.getUserMedia({ audio: audioOnOff, video: videoOnOff }).then(stream => {
+                userVideo.current.srcObject = stream;
+                userStream.current = stream;
 
-            socketRef.current = io.connect("/");
-            socketRef.current.emit("join room", getRoomID());
+                socketRef.current = io.connect("/");
+                socketRef.current.emit("join room", getRoomID());
 
-            socketRef.current.on('other user', userID => {
-                callUser(userID);
-                otherUser.current = userID;
+                socketRef.current.on('other user', userID => {
+                    callUser(userID);
+                    otherUser.current = userID;
+                });
+
+                socketRef.current.on("user joined", userID => {
+                    otherUser.current = userID;
+                });
+
+                socketRef.current.on("offer", handleRecieveCall);
+
+                socketRef.current.on("answer", handleAnswer);
+
+                socketRef.current.on("ice-candidate", handleNewICECandidateMsg);
             });
+        
 
-            socketRef.current.on("user joined", userID => {
-                otherUser.current = userID;
-            });
-
-            socketRef.current.on("offer", handleRecieveCall);
-
-            socketRef.current.on("answer", handleAnswer);
-
-            socketRef.current.on("ice-candidate", handleNewICECandidateMsg);
-        });
+        
 
     }, []);
 
@@ -188,6 +194,52 @@ const Room = (props) => {
         history.push(`/home/room/${id}`);
     }
 
+    function muteAudio(){
+        if(audioOnOff){
+            setAudioOnOff(false);
+            if(!audioOnOff && ! videoOnOff){
+                userVideo.current.srcObject = null;
+                userStream.current = null;
+            }else if(videoOnOff === true){
+                navigator.mediaDevices.getUserMedia({audio: true, video: videoOnOff}).then(stream => {
+                    userVideo.current.srcObject = stream;
+                    userStream.current = stream;
+                })
+            }
+            
+        }else{
+            setAudioOnOff(true);
+            navigator.mediaDevices.getUserMedia({audio: audioOnOff, video: videoOnOff}).then(stream => {
+                userVideo.current.srcObject = stream;
+                userStream.current = stream;
+            })
+        }
+        
+    }
+
+    function turnOffCamera(){
+        if(videoOnOff){
+            setVideoOnOff(false);
+            if(!audioOnOff && ! videoOnOff){
+                userVideo.current.srcObject = null;
+                userStream.current = null;
+            }else if(audioOnOff === true){
+                navigator.mediaDevices.getUserMedia({audio: true, video: videoOnOff}).then(stream => {
+                    userVideo.current.srcObject = stream;
+                    userStream.current = stream;
+                })
+            }
+        }else{
+            setVideoOnOff(true);
+            navigator.mediaDevices.getUserMedia({audio: audioOnOff, video: videoOnOff}).then(stream => {
+                userVideo.current.srcObject = stream;
+                userStream.current = stream;
+            })
+            
+        }
+        
+    }
+
 
     return (
         <div style={{height:"100vh", width:'100vw'}}>
@@ -272,6 +324,7 @@ const Room = (props) => {
                 <div style={{width:'100%'}}>
                     <BottomNavigation
                         showLabels
+                        onChange={(event, newValue)=>{if(newValue===0){muteAudio()}else if(newValue===1){turnOffCamera()}else{}}}
                         >
                         <BottomNavigationAction label="Audio" icon={<MicOffIcon />} />
                         <BottomNavigationAction label="Video" icon={<VideocamOffIcon />} />
