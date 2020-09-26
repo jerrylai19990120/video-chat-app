@@ -324,7 +324,7 @@ const Room = (props) => {
                 <div style={{width:'100%'}}>
                     <BottomNavigation
                         showLabels
-                        onChange={(event, newValue)=>{if(newValue===0){muteAudio()}else if(newValue===1){turnOffCamera()}else{}}}
+                        onChange={(event, newValue)=>{if(newValue===0){muteAudio()}else if(newValue===1){turnOffCamera()}else{setTabVal(4)}}}
                         >
                         <BottomNavigationAction label="Audio" icon={<MicOffIcon />} />
                         <BottomNavigationAction label="Video" icon={<VideocamOffIcon />} />

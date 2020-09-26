@@ -249,6 +249,45 @@ app.put('/declinedFriend/:username/:friend', (req, res)=>{
     })
 })
 
+app.delete('/delete-account', (req, res)=>{
+
+})
+
+app.put('/change-password', (req, res)=>{
+    const username = req.body.username;
+    const password = req.body.password;
+    User.findOneAndUpdate({username: username}, {password: password}).then(result => {
+        if(!result){
+            res.status(404).send();
+        }else{
+            res.send(result);
+        }
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).send();
+    })
+})
+
+app.put('/change-email', (req, res)=>{
+    
+    const username = req.body.username;
+    const email = req.body.email;
+    User.findOneAndUpdate({username: username}, {email: email}).then(result => {
+        if(!result){
+            res.status(404).send();
+        }else{
+            res.send(result);
+        }
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).send();
+    })
+})
+
+
+
 
 
 const port = process.env.PORT || 8000;

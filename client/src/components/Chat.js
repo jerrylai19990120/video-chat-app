@@ -258,6 +258,7 @@ const Chat = (history, app)=>{
                 <div style={{width:'100%'}}>
                     <BottomNavigation
                         showLabels
+                        onChange={(event, newVal)=>{if(newVal===2){setTabVal(4)}}}
                         >
                         <BottomNavigationAction label="Audio" icon={<MicOffIcon />} />
                         <BottomNavigationAction label="Video" icon={<VideocamOffIcon />} />
