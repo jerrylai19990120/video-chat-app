@@ -251,6 +251,17 @@ app.put('/declinedFriend/:username/:friend', (req, res)=>{
 
 app.delete('/delete-account', (req, res)=>{
 
+    const username = req.body.username;
+
+    User.deleteOne({username: username}).then(result => {
+        if(result){
+            res.send(result);
+        }
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).send();
+    })
 })
 
 app.put('/change-password', (req, res)=>{

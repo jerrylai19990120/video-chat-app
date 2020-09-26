@@ -142,7 +142,7 @@ const CreateRoom = (history, app) => {
                     <Requests currUser={app.state.currentUser}/>
                 </div>
                 <div style={{height: "85.5%", width:'100%', backgroundColor:'#36393F'}} hidden={tabVal!==4}>
-                    <Profile currUser={app.state.currentUser}/>
+                    <Profile currUser={app.state.currentUser} app={app}/>
                 </div>
                 <div style={{width:'100%'}}>
                     <BottomNavigation

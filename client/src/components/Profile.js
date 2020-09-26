@@ -5,6 +5,8 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import Modal from '@material-ui/core/Modal';
 import { set } from 'mongoose';
 import TextField from '@material-ui/core/TextField';
+import {logOut} from '../actions/userActions';
+import {useHistory} from 'react-router-dom';
 
 
 const bcrypt = require('bcryptjs');
@@ -85,6 +87,29 @@ const Profile = (props) => {
     }
 
     const deleteAcc = ()=>{
+        const username = props.currUser;
+
+        const request = new Request('/delete-account', {
+            method: 'delete',
+            body: JSON.stringify({
+                username: username
+            }),
+            headers: {
+                Accept: 'application/json, text/plain, */*',
+                "Content-type": 'application/json'
+            }
+        })
+
+        fetch(request)
+            .then(result => {
+                if(result.status===200){
+                    return result.json();
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            })
+        
         setOpen(false);
     }
 
@@ -97,7 +122,7 @@ const Profile = (props) => {
     const closeEmailModal = ()=>{
         setEmailModal(false);
     }
-
+    const history = useHistory();
     return(
         <div style={{width: '40%', height: '100%', overflowY: 'auto', paddingTop:'2vh', textAlign:'center', marginLeft:'30%', lineHeight:'46px'}}>
             <img alt="profile" src={profilePic} style={{width:'36%', height:'26%'}}></img>
@@ -125,7 +150,7 @@ const Profile = (props) => {
                                 variant="contained"
                                 color="secondary"
                                 startIcon={<DeleteIcon />}
-                                onClick={deleteAcc}
+                                onClick={()=>{logOut(props.app);deleteAcc();history.push('/')}}
                             >
                                 Delete
                             </Button>
