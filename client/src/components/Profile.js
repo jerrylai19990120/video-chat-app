@@ -7,9 +7,27 @@ import { set } from 'mongoose';
 import TextField from '@material-ui/core/TextField';
 import {logOut} from '../actions/userActions';
 import {useHistory} from 'react-router-dom';
+import S3 from 'aws-s3'; 
+import ImageUploader from 'react-images-upload';
+
+
 
 
 const bcrypt = require('bcryptjs');
+const AWS = require('aws-sdk');
+
+const s3 = new AWS.S3({
+    accessKeyId: "AKIAJ2YMMAOIXUYHF6PA",
+    secretAccessKey: "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"
+})
+s3.getObject({Bucket: 'my-web-app-db', Key: 'jerrylai.jpg'}, (err, data)=>{
+    if(err){
+        alert(err);
+    }else{
+        alert(data);
+    }
+})
+
 
 
 const Profile = (props) => {
@@ -19,6 +37,9 @@ const Profile = (props) => {
     const [newPass, setNewPass] = useState('');
     const [passModel, setPassModal] = useState(false);
     const [emailModal, setEmailModal] = useState(false);
+    const [picModal, setPicModal] = useState(false);
+    const [picture, setPicture] = useState(false);
+
 
     const changePassword = ()=>{
 
@@ -55,9 +76,6 @@ const Profile = (props) => {
 
     }
 
-    const changePic = ()=>{
-
-    }
 
     const changeEmail = ()=>{
 
@@ -122,13 +140,33 @@ const Profile = (props) => {
     const closeEmailModal = ()=>{
         setEmailModal(false);
     }
+    const closePicModal = ()=>{
+        setPicModal(false);
+    }
     const history = useHistory();
+
+    async function getImage(){
+        const data =  s3.getObject(
+            {
+                Bucket: 'my-web-app-db',
+                Key: 'jerrylai.jpg'
+                }
+            
+            ).promise();
+            return data;
+    }
+    function encode(data){
+        let buf = Buffer.from(data);
+        let base64 = buf.toString('base64');
+        return base64
+    }
+
     return(
         <div style={{width: '40%', height: '100%', overflowY: 'auto', paddingTop:'2vh', textAlign:'center', marginLeft:'30%', lineHeight:'46px'}}>
-            <img alt="profile" src={profilePic} style={{width:'36%', height:'26%'}}></img>
+            {(picture===false)?<img alt="profile" src={profilePic} style={{width:'36%', height:'26%'}}></img>: ''}
             <h2 style={{color:'white'}}>{props.currUser}</h2>
             <span style={{cursor:'pointer', color:'white'}} onClick={()=>{setPassModal(true)}}>Change password</span><br/>
-            <span style={{cursor:'pointer', color:'white'}} onClick={changePic}>Change profile picture</span><br/>
+            <span style={{cursor:'pointer', color:'white'}} onClick={()=>{setPicModal(true)}}>Change profile picture</span><br/>
             <span style={{cursor:'pointer', color:'white'}} onClick={()=>{setEmailModal(true)}}>Change email</span><br/><br/><br/>
             <Button
                 variant="contained"
@@ -195,6 +233,20 @@ const Profile = (props) => {
                                 Change
                             </Button>
                             <Button variant="outlined" onClick={()=>{setPassModal(false)}} style={{marginLeft:"6%"}}>Cancel</Button>
+                        </div>
+            </Modal>
+            <Modal
+                        open={picModal}
+                        onClose={closePicModal}
+                        aria-labelledby="simple-modal-title"
+                        aria-describedby="simple-modal-description"
+                        >
+                        <div style={{width:'28vw', height:'38vh', backgroundColor:'white', marginLeft:'40vw', marginTop:'20vh', padding:'2%', textAlign:'center'}}>
+                        <form method="post" action="/upload" encType="multipart/form-data" id="pic">
+                            <input type='file' name="image"/>
+                            <button type="submit" onClick={()=>{setPicModal(false); document.getElementById('pic').submit();}}>Upload</button>
+                            <Button variant="outlined" onClick={()=>{setPicModal(false)}} style={{marginLeft:"6%"}}>Cancel</Button>
+                        </form>
                         </div>
             </Modal>
         </div>

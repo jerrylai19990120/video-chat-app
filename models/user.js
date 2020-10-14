@@ -41,6 +41,9 @@ const UserSchema = new mongoose.Schema({
     },
     requests: {
         type: [RequestSchema]
+    },
+    profilePic: {
+        type: String
     }
 })
 

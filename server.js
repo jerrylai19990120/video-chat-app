@@ -7,6 +7,7 @@ const server = http.createServer(app);
 const socket = require("socket.io");
 const io = socket(server);
 
+
 const {mongoose} = require('./db/mongoose');
 mongoose.set('useFindAndModify', false);
 
@@ -52,6 +53,7 @@ io.on("connection", socket => {
 
 
 app.use(bodyParser.json());
+
 app.use(
     session({
         secret: 'oursecret',
@@ -297,9 +299,79 @@ app.put('/change-email', (req, res)=>{
     })
 })
 
+//upload pictures
+const multer = require('multer');
+const AWS = require('aws-sdk');
+
+const s3 = new AWS.S3({
+    accessKeyId: process.env.AWS_ID,
+    secretAccessKey: process.env.AWS_SECRET
+})
+
+const storage = multer.memoryStorage({
+    destination: function(req, file, cb){
+        cb(null, '');
+    }
+})
+
+const upload = multer({storage: storage}).single('image');
+
+app.post('/upload', upload, (req, res)=>{
+
+    let myFile = req.file.originalname.split('.');
+    const fileType = myFile[myFile.length - 1];
+
+    const params = {
+        Bucket: process.env.AWS_BUCKET_NAME,
+        Key: `${req.session.username}.${fileType}`,
+        Body: req.file.buffer
+    }
+
+    s3.upload(params, (err, data)=>{
+        if(err){
+            res.status(500).send(err);
+        }
+
+        res.status(200).send(data);
+    })
+
+    User.findOneAndUpdate({username: req.session.username}, {profilePic: `${req.session.username}.${fileType}`}).then(result => {
+        if(!result){
+            res.status(404).send();
+        }else{
+            res.send(result);
+        }
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).send();
+    })
+
+})
 
 
 
+
+app.get('/get-picture', (req, res)=>{
+
+    User.findByUsername('jerrylai').then(user => {
+        const params = {
+            Bucket: process.env.AWS_BUCKET_NAME,
+            Key: `jerrylai.jpg`,
+        }
+        s3.getObject(params, (err, data)=>{
+            if(err){
+                res.status(500).send(err);
+            }else{
+                res.status(200).send(data);
+            }
+        })
+    })
+    .catch(err => {
+        console.log(err)
+        res.status(400).send()
+    })
+})
 
 const port = process.env.PORT || 8000;
 server.listen(port, () => console.log(`server is running on port ${port}`));
