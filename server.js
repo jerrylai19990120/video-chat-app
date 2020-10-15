@@ -302,6 +302,7 @@ app.put('/change-email', (req, res)=>{
 //upload pictures
 const multer = require('multer');
 const AWS = require('aws-sdk');
+const { resolve } = require("path");
 
 const s3 = new AWS.S3({
     accessKeyId: process.env.AWS_ID,
@@ -349,28 +350,17 @@ app.post('/upload', upload, (req, res)=>{
 
 })
 
-
-
-
 app.get('/get-picture', (req, res)=>{
 
-    User.findByUsername('jerrylai').then(user => {
-        const params = {
-            Bucket: process.env.AWS_BUCKET_NAME,
-            Key: `jerrylai.jpg`,
+    User.findOne({username: 'user2'}).then(user => {
+        if(user){
+            res.send(user);
         }
-        s3.getObject(params, (err, data)=>{
-            if(err){
-                res.status(500).send(err);
-            }else{
-                res.status(200).send(data);
-            }
-        })
     })
     .catch(err => {
-        console.log(err)
-        res.status(400).send()
+        res.status(500).send(err);
     })
+    
 })
 
 const port = process.env.PORT || 8000;

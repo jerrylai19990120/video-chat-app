@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import profilePic from "../images/profilePic.jpg";
 import Button from '@material-ui/core/Button';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -17,8 +17,6 @@ const bcrypt = require('bcryptjs');
 
 
 
-
-
 const Profile = (props) => {
 
     const [open, setOpen] = useState(false);
@@ -27,8 +25,21 @@ const Profile = (props) => {
     const [passModel, setPassModal] = useState(false);
     const [emailModal, setEmailModal] = useState(false);
     const [picModal, setPicModal] = useState(false);
-    const [picture, setPicture] = useState(false);
+    const [picture, setPicture] = useState('none');
 
+    useEffect(() => {
+        fetch('/get-picture').then(result => {
+            return result.json();
+        })
+        .then(json => {
+            setPicture(json.profilePic);
+        })
+        .catch(err => {
+            console.log(err);
+        })
+    }, [])
+
+    
 
     const changePassword = ()=>{
 
@@ -134,25 +145,11 @@ const Profile = (props) => {
     }
     const history = useHistory();
 
-    async function getImage(){
-        const data =  s3.getObject(
-            {
-                Bucket: 'my-web-app-db',
-                Key: 'jerrylai.jpg'
-                }
-            
-            ).promise();
-            return data;
-    }
-    function encode(data){
-        let buf = Buffer.from(data);
-        let base64 = buf.toString('base64');
-        return base64
-    }
+    
 
     return(
         <div style={{width: '40%', height: '100%', overflowY: 'auto', paddingTop:'2vh', textAlign:'center', marginLeft:'30%', lineHeight:'46px'}}>
-            {(picture===false)?<img alt="profile" src={profilePic} style={{width:'36%', height:'26%'}}></img>: ''}
+            {(picture==='none')?<img alt="profile" src={profilePic} style={{width:'36%', height:'26%'}}></img>: <img alt="picture" src={`https://my-web-app-db.s3.amazonaws.com/${picture}`} style={{width:'36%', height:'26%'}}></img>}
             <h2 style={{color:'white'}}>{props.currUser}</h2>
             <span style={{cursor:'pointer', color:'white'}} onClick={()=>{setPassModal(true)}}>Change password</span><br/>
             <span style={{cursor:'pointer', color:'white'}} onClick={()=>{setPicModal(true)}}>Change profile picture</span><br/>

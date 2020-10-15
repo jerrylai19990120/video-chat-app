@@ -43,7 +43,8 @@ const UserSchema = new mongoose.Schema({
         type: [RequestSchema]
     },
     profilePic: {
-        type: String
+        type: String,
+        default: 'none'
     }
 })
 
