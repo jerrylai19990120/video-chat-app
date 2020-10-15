@@ -230,7 +230,7 @@ const Profile = (props) => {
                         <div style={{width:'28vw', height:'38vh', backgroundColor:'white', marginLeft:'40vw', marginTop:'20vh', padding:'2%', textAlign:'center'}}>
                         <form method="post" action="/upload" encType="multipart/form-data" id="pic">
                             <input type='file' name="image"/>
-                            <button type="submit" onClick={()=>{setPicModal(false); document.getElementById('pic').submit();}}>Upload</button>
+                            <button type="submit">Upload</button>
                             <Button variant="outlined" onClick={()=>{setPicModal(false)}} style={{marginLeft:"6%"}}>Cancel</Button>
                         </form>
                         </div>
