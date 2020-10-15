@@ -14,19 +14,8 @@ import ImageUploader from 'react-images-upload';
 
 
 const bcrypt = require('bcryptjs');
-const AWS = require('aws-sdk');
 
-const s3 = new AWS.S3({
-    accessKeyId: "AKIAJ2YMMAOIXUYHF6PA",
-    secretAccessKey: "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"
-})
-s3.getObject({Bucket: 'my-web-app-db', Key: 'jerrylai.jpg'}, (err, data)=>{
-    if(err){
-        alert(err);
-    }else{
-        alert(data);
-    }
-})
+
 
 
 
