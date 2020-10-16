@@ -328,31 +328,47 @@ app.post('/upload', upload, (req, res)=>{
         Body: req.file.buffer
     }
 
-    s3.upload(params, (err, data)=>{
-        if(err){
-            res.status(500).send(err);
-        }
-
-        res.status(200).send(data);
-    })
-
-    User.findOneAndUpdate({username: req.session.username}, {profilePic: `${req.session.username}.${fileType}`}).then(result => {
-        if(!result){
-            res.status(404).send();
-        }else{
-            res.send(result);
+    User.findOne({username: req.session.username}).then(user => {
+        if(user){
+            const params2 = {
+                Bucket: process.env.AWS_BUCKET_NAME,
+                Key: user.profilePic
+            }
+            
+            s3.deleteObject(params2, (err, data)=>{
+                if (err) {
+                    console.log(err)
+                }
+            })
         }
     })
     .catch(err => {
         console.log(err);
-        res.status(500).send();
+    })
+
+
+    s3.upload(params, (err, data)=>{
+
+        if (err) {
+            res.status(500).send(err);
+        }
+        
+        User.findOneAndUpdate({username: req.session.username}, {profilePic: `${req.session.username}.${fileType}`}).then(result => {
+            if(result){
+                res.status(200).send("File upload successfully.");
+            }
+        })
+        .catch(err => {
+            console.log(err)
+        })
+        
     })
 
 })
 
-app.get('/get-picture', (req, res)=>{
+app.post('/get-picture', (req, res)=>{
 
-    User.findOne({username: 'user2'}).then(user => {
+    User.findOne({username: req.body.username}).then(user => {
         if(user){
             res.send(user);
         }
@@ -362,6 +378,39 @@ app.get('/get-picture', (req, res)=>{
     })
     
 })
+
+app.put('/delete-picture', (req, res)=>{
+    
+    User.findOne({username: req.body.username}).then(user => {
+        if(user){
+            const params = {
+                Bucket: process.env.AWS_BUCKET_NAME,
+                Key: user.profilePic
+            }
+
+            s3.deleteObject(params, (err, data)=>{
+                if (err) {
+                    console.log(err)
+                }
+                
+            })
+        }
+    })
+    .catch(err => {
+        console.log(err)
+    })
+
+    User.findOneAndUpdate({username: req.body.username}, {profilePic: 'none'}).then(result => {
+        if(result){
+            res.send(result);
+        }
+    })
+    .catch(err => {
+        console.log(err);
+    })
+})
+
+
 
 const port = process.env.PORT || 8000;
 server.listen(port, () => console.log(`server is running on port ${port}`));

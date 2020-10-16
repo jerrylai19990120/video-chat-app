@@ -3,19 +3,11 @@ import profilePic from "../images/profilePic.jpg";
 import Button from '@material-ui/core/Button';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Modal from '@material-ui/core/Modal';
-import { set } from 'mongoose';
 import TextField from '@material-ui/core/TextField';
 import {logOut} from '../actions/userActions';
-import {useHistory} from 'react-router-dom';
-import S3 from 'aws-s3'; 
-import ImageUploader from 'react-images-upload';
-
-
-
+import {useHistory, Redirect} from 'react-router-dom';
 
 const bcrypt = require('bcryptjs');
-
-
 
 const Profile = (props) => {
 
@@ -26,17 +18,34 @@ const Profile = (props) => {
     const [emailModal, setEmailModal] = useState(false);
     const [picModal, setPicModal] = useState(false);
     const [picture, setPicture] = useState('none');
+    const [delModal, setDelModal] = useState(false);
 
     useEffect(() => {
-        fetch('/get-picture').then(result => {
-            return result.json();
+        const username = props.currUser;
+
+        const request = new Request('/get-picture', {
+            method: 'post',
+            body: JSON.stringify({
+                username: username
+            }),
+            headers: {
+                Accept: 'application/json, text/plain, */*',
+                "Content-type": 'application/json'
+            }
         })
-        .then(json => {
-            setPicture(json.profilePic);
-        })
-        .catch(err => {
-            console.log(err);
-        })
+
+        fetch(request)
+            .then(result => {
+                if(result.status===200){
+                    return result.json();
+                }
+            })
+            .then(json => {
+                setPicture(json.profilePic);
+            })
+            .catch(err => {
+                console.log(err);
+            })
     }, [])
 
     
@@ -143,9 +152,38 @@ const Profile = (props) => {
     const closePicModal = ()=>{
         setPicModal(false);
     }
+
+    const closeDelModal = () => {
+        setDelModal(false);
+    }
+
+    const deletePicture = () => {
+        setPicture('none');
+        const username = props.currUser;
+
+        const request = new Request('/delete-picture', {
+            method: 'put',
+            body: JSON.stringify({
+                username: username
+            }),
+            headers: {
+                Accept: 'application/json, text/plain, */*',
+                "Content-type": 'application/json'
+            }
+        })
+
+        fetch(request)
+            .then(result => {
+                if(result.status===200){
+                    return result.json();
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }
     const history = useHistory();
 
-    
 
     return(
         <div style={{width: '40%', height: '100%', overflowY: 'auto', paddingTop:'2vh', textAlign:'center', marginLeft:'30%', lineHeight:'46px'}}>
@@ -153,7 +191,8 @@ const Profile = (props) => {
             <h2 style={{color:'white'}}>{props.currUser}</h2>
             <span style={{cursor:'pointer', color:'white'}} onClick={()=>{setPassModal(true)}}>Change password</span><br/>
             <span style={{cursor:'pointer', color:'white'}} onClick={()=>{setPicModal(true)}}>Change profile picture</span><br/>
-            <span style={{cursor:'pointer', color:'white'}} onClick={()=>{setEmailModal(true)}}>Change email</span><br/><br/><br/>
+            <span style={{cursor:'pointer', color:'white'}} onClick={()=>{setDelModal(true)}} disabled={picture==='none'}>Delete profile picture</span><br/>
+            <span style={{cursor:'pointer', color:'white'}} onClick={()=>{setEmailModal(true)}}>Change email</span><br/><br/>
             <Button
                 variant="contained"
                 color="secondary"
@@ -228,11 +267,29 @@ const Profile = (props) => {
                         aria-describedby="simple-modal-description"
                         >
                         <div style={{width:'28vw', height:'38vh', backgroundColor:'white', marginLeft:'40vw', marginTop:'20vh', padding:'2%', textAlign:'center'}}>
-                        <form method="post" action="/upload" encType="multipart/form-data" id="pic">
-                            <input type='file' name="image"/>
-                            <button type="submit">Upload</button>
+                        <form method="post" target="_blank" action="/upload" encType="multipart/form-data" id="pic" style={{padding: '20%'}}>
+                            <input type='file' name="image" style={{marginLeft: '16%'}}/><br/><br/><br/><br/>
+                            <Button variant="outlined" onClick={()=>{setPicModal(false);document.getElementById('pic').submit()}} style={{marginLeft:"6%"}}>Upload</Button>
                             <Button variant="outlined" onClick={()=>{setPicModal(false)}} style={{marginLeft:"6%"}}>Cancel</Button>
                         </form>
+                        </div>
+            </Modal>
+            <Modal
+                        open={delModal}
+                        onClose={closeDelModal}
+                        aria-labelledby="simple-modal-title"
+                        aria-describedby="simple-modal-description"
+                        >
+                        <div style={{width:'28vw', height:'38vh', backgroundColor:'white', marginLeft:'40vw', marginTop:'20vh', padding:'2%', textAlign:'center'}}>
+                            <Button
+                                variant="contained"
+                                color="secondary"
+                                startIcon={<DeleteIcon />}
+                                onClick={()=>{setDelModal(false);deletePicture();}}
+                            >
+                                Delete
+                            </Button>
+                            <Button variant="outlined" onClick={()=>{setDelModal(false)}} style={{marginLeft:"6%"}}>Cancel</Button>
                         </div>
             </Modal>
         </div>
