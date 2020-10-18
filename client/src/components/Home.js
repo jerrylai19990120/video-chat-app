@@ -31,7 +31,7 @@ import FindFriends from './FindFriends';
 const shortid = require('shortid');
 
 
-const CreateRoom = (history, app, passcode, origEmail) => {
+const CreateRoom = (history, app, username, origEmail) => {
     const [open, setOpen] = useState(false);
     const [roomID, setRoomID] = useState('');
     const [selected, setSelected] = useState(false);
@@ -142,7 +142,7 @@ const CreateRoom = (history, app, passcode, origEmail) => {
                     <Requests currUser={app.state.currentUser}/>
                 </div>
                 <div style={{height: "85.5%", width:'100%', backgroundColor:'#36393F'}} hidden={tabVal!==4}>
-                    <Profile currUser={app.state.currentUser} app={app} history={history} passcode={passcode} origEmail={origEmail}/>
+                    <Profile currUser={app.state.currentUser} app={app} history={history} username={username} origEmail={origEmail}/>
                 </div>
                 <div style={{width:'100%'}}>
                     <BottomNavigation

@@ -202,6 +202,16 @@ app.post('/findAnUser', (req, res)=>{
     })
 })
 
+app.get('/:username', (req, res)=>{
+    const username = req.params.username;
+    User.findOne({username: username}).then(result => {
+        res.send(result);
+    })
+    .catch(err => {
+        console.log(err);
+    })
+})
+
 //remove friend
 app.put('/deleteFriend/:username/:friend', (req, res)=>{
     const username = req.params.username;

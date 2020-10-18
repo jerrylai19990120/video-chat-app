@@ -34,7 +34,7 @@ import FindFriends from './FindFriends';
 
 const shortid = require('shortid');
 
-const Chat = (history, app, passcode, origEmail)=>{
+const Chat = (history, app, username, origEmail)=>{
     const [yourID, setYourID] = useState();
     const [messages, setMessages] = useState([]);
     const [message, setMessage] = useState("");
@@ -253,7 +253,7 @@ const Chat = (history, app, passcode, origEmail)=>{
                     <Requests currUser={app.state.currentUser}/>
                 </div>
                 <div style={{height: "85.5%", width:'100%', backgroundColor:'#36393F'}} hidden={tabVal!==4}>
-                    <Profile currUser={app.state.currentUser} origEmail={origEmail} passcode={passcode}/>
+                    <Profile currUser={app.state.currentUser} origEmail={origEmail} username={username}/>
                 </div>
                 <div style={{width:'100%'}}>
                     <BottomNavigation

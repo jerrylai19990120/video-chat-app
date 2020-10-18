@@ -108,35 +108,38 @@ const Profile = (props) => {
 
     const changePassword = async ()=>{
 
-        const res = await new Promise((resolve, reject)=>{
-            bcrypt.compare(props.passcode, oldPass, (err, res)=>{
-                
-                if(err){
-                    reject(err);
-                }
-                resolve(res);
+        fetch(`/${props.username}`)
+            .then(result => {
+                return result.json()
             })
-        })
+            .then(json => {
+                bcrypt.compare(oldPass, json.password, (err, res)=>{
+                    if(!res){
+                        setOldValid(true);
+                        setOldMessage('password does not match');
+                        return;
+                    }else{
+                        setOldValid(false);
+                        setOldMessage('');
+                    }
 
-        if(!res){
-            setOldValid(true);
-            setOldMessage('password does not match');
-            return;
-        }else{
-            setOldValid(false);
-            setOldMessage('');
-        }
-        if(!(newPass === conPass)){
-            setConPassword(true);
-            setConPMessage('password does not match');
-            return;
-        }else{
-            setConPassword(false);
-            setConPMessage('');
-        }
-        
-        postToDB();
-        
+                    if(!(newPass === conPass)){
+                        setConPassword(true);
+                        setConPMessage('password does not match');
+                        return;
+                    }else{
+                        setConPassword(false);
+                        setConPMessage('');
+                    }
+                    
+                    postToDB();
+                })
+
+                
+            })
+            .catch(err => {
+                console.log(err);
+            })
     }
 
     const changeEmail = async ()=>{

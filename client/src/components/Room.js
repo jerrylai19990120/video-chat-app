@@ -319,7 +319,7 @@ const Room = (props) => {
                     <Requests currUser={props.app.state.currentUser}/>
                 </div>
                 <div style={{height: "85.5%", width:'100%', backgroundColor:'#36393F'}} hidden={tabVal!==4}>
-                    <Profile currUser={props.app.state.currentUser} origEmail={props.app.state.email} passcode={props.app.state.passcode}/>
+                    <Profile currUser={props.app.state.currentUser} origEmail={props.app.state.email} passcode={props.app.state.username}/>
                 </div>
                 <div style={{width:'100%'}}>
                     <BottomNavigation
