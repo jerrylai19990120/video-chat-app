@@ -16,8 +16,44 @@ class App extends React.Component{
     super(props);
     readCookie(this);
     this.state = {
-      currentUser: null
+      currentUser: null,
+      passcode: '',
+      email: ''
     }
+  }
+
+  componentDidMount(){
+      fetch('/check-session')
+        .then(user => {
+          return user.json();
+        })
+        .then(json => {
+          const request = new Request('/findAnUser', {
+              method:'post',
+              body: JSON.stringify({
+                  username: json.currentUser
+              }),
+              headers: {
+                  Accept: 'application/json, text/plain, */*',
+                  "Content-type": 'application/json'
+              }
+          })
+
+          fetch(request)
+            .then(result => {
+              return result.json();
+            })
+            .then(result2 => {
+              this.setState({passcode: result2.password, email: result2.email});
+            })
+            .catch(err => {
+              console.log(err);
+            })
+        })
+        .catch(err => {
+          console.log(err);
+        })
+      
   }
   
   render(){
@@ -27,10 +63,10 @@ class App extends React.Component{
         <BrowserRouter>
           <Switch>
             <Route path="/home/room/:roomID" component={()=> <Room app={this}/>} />
-            <Route path="/chat/:roomID" component={()=>{return Chat(useHistory(), this)}}/>
-            <Route path='/home' component={()=>{if(!this.state.currentUser){useHistory().push('/')}else{return CreateRoom(useHistory(), this)}}}/>
-            <Route exact path={['/', '/home', '/home/room/:roomID']} component={()=>{if(this.state.currentUser){return CreateRoom(useHistory().push('/home'), this)}else{return <Login app={this}/>}}}/>
-            <Route exact path="/signup" component={()=>{if(this.state.currentUser){return CreateRoom(useHistory().push('/home'), this)}else{return <SignUp app={this}/>}}}/>
+            <Route path="/chat/:roomID" component={()=>{return Chat(useHistory(), this, this.state.passcode, this.state.email)}}/>
+            <Route path='/home' component={()=>{if(!this.state.currentUser){useHistory().push('/')}else{return CreateRoom(useHistory(), this, this.state.passcode, this.state.email)}}}/>
+            <Route exact path={['/', '/home', '/home/room/:roomID']} component={()=>{if(this.state.currentUser){return CreateRoom(useHistory().push('/home'), this, this.state.passcode, this.state.email)}else{return <Login app={this}/>}}}/>
+            <Route exact path="/signup" component={()=>{if(this.state.currentUser){return CreateRoom(useHistory().push('/home'), this, this.state.passcode, this.state.email)}else{return <SignUp app={this}/>}}}/>
           </Switch>
         </BrowserRouter>
       </div>

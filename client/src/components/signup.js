@@ -12,7 +12,13 @@ class SignUp extends React.Component{
             username: '',
             email: '',
             password: '',
-            confirm: ''
+            confirm: '',
+            invalid: false,
+            warnings: '',
+            emailInvalid: false,
+            emailWarnings: '',
+            duplicateName: false,
+            nameWarn: ''
         }
     }
 
@@ -30,10 +36,17 @@ class SignUp extends React.Component{
                     <div style={{height:"128%", width:"80%", backgroundColor:'white', paddingTop:'10%', borderRadius:'16px', marginLeft:'8%', marginTop:'-8%'}}>
                     <h1 style={{color:'#67C7C1'}}>Sign Up</h1>
                         <form>
-                            <TextField required id="standard-required" label="Username" onChange={(event)=>{this.setState({username: event.target.value})}}/><br/>
-                            <TextField required id="standard-required" label="Email address" onChange={(event)=>{this.setState({email: event.target.value})}}/><br/>
-                            <TextField required id="standard-required" label="Password" type='password' onChange={(event)=>{this.setState({password: event.target.value})}}/><br/>
-                            <TextField required id="standard-required" label="Confirm password" type='password' onChange={(event)=>{this.setState({confirm: event.target.value})}}/><br/><br/>
+                            <TextField required id="standard-required" label="Username" onChange={(event)=>{this.setState({username: event.target.value})}}
+                            error={this.state.duplicateName}
+                            helperText={this.state.nameWarn}/><br/>
+                            <TextField required id="standard-required" label="Email address" onChange={(event)=>{this.setState({email: event.target.value})}}
+                            error={this.state.emailInvalid}
+                            helperText={this.state.emailWarnings}/><br/>
+                            <TextField required id="standard-required" label="Password" type='password' onChange={(event)=>{this.setState({password: event.target.value})}} error={this.state.invalid}/><br/>
+                            <TextField required id="standard-required" label="Confirm password" type='password' onChange={(event)=>{this.setState({confirm: event.target.value})}}
+                            error={this.state.invalid}
+                            helperText={this.state.warnings}
+                            /><br/><br/>
                             <Button variant="contained" color="primary" onClick={()=> {signUp(this, this.props.app)}}>
                                 Join our community!
                             </Button><br/><br/>

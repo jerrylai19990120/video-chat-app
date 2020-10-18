@@ -12,7 +12,9 @@ class Login extends React.Component{
         super(props);
         this.state = {
             username: '',
-            password: ''
+            password: '',
+            isInvalid: false,
+            warnings: ''
         }
     }
 
@@ -36,6 +38,8 @@ class Login extends React.Component{
                                 type="password"
                                 autoComplete="current-password"
                                 onChange={(event)=>{this.setState({password: event.target.value})}}
+                                error={this.state.isInvalid}
+                                helperText={this.state.warnings}
                             /><br/>
                             <Button variant="contained" color="primary" style={{width:"28%", height:'4vh', marginTop:'2vh'}} onClick={()=>{login(this, this.props.app)}}>
                                 Log in

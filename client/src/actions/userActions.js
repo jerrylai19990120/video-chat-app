@@ -35,6 +35,8 @@ export const login = (info, app) => {
                             .catch(error => {
                                 console.log(error)
                             })
+                    }else{
+                        info.setState({isInvalid: true, warnings: 'wrong password'})
                     }
                 })
             }
@@ -42,15 +44,52 @@ export const login = (info, app) => {
 
 }
 
-export const signUp = (info, app) => {
+export const signUp = async (info, app) => {
 
+    await fetch('/loginAuth')
+        .then(result => {
+            return result.json();
+        })
+        .then(json => {
+            for(let i=0;i<json.length;i++){
+                if(json[i].username === info.state.username){
+                    info.setState({duplicateName: true, nameWarn: 'Username already exists'});
+                    break;
+                }
+                if(i===(json.length-1) && json[i].username !== info.state.username){
+                    info.setState({duplicateName: false, nameWarn: ''});
+                }
+            }
+        })
+        .catch(err => {
+            console.log(err);
+        })
 
+    if(info.state.duplicateName === true){
+        return;
+    }else{
+        info.setState({duplicateName: false, nameWarn: ''});
+    }
+    
+    
+    if(!(/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/.test(info.state.email))){
+        info.setState({emailInvalid: true, emailWarnings: 'improper email address'})
+        return;
+    }else{
+        info.setState({emailInvalid: false, emailWarnings: ''})
+    }
+    if(!(info.state.password === info.state.confirm)){
+        info.setState({invalid: true, warnings: 'password does not match'});
+        return;
+    }else{
+        info.setState({invalid: false, warnings: ''});
+    }
     const request = new Request('/signup', {
         method:'post',
         body: JSON.stringify({
             username: info.state.username,
             email: info.state.email,
-            password: info.state.password
+            password: info.state.password,
         }),
         headers: {
             Accept: "application/json, text/plain, */*",

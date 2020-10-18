@@ -1,5 +1,5 @@
 import React from "react";
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import Drawer from '@material-ui/core/Drawer';
 import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
@@ -31,11 +31,11 @@ import FindFriends from './FindFriends';
 const shortid = require('shortid');
 
 
-const CreateRoom = (history, app) => {
+const CreateRoom = (history, app, passcode, origEmail) => {
     const [open, setOpen] = useState(false);
     const [roomID, setRoomID] = useState('');
     const [selected, setSelected] = useState(false);
-    const [tabVal, setTabVal] = useState(0);
+    const [tabVal, setTabVal] = useState(0); 
 
     function create() {
         const id = shortid.generate();
@@ -142,7 +142,7 @@ const CreateRoom = (history, app) => {
                     <Requests currUser={app.state.currentUser}/>
                 </div>
                 <div style={{height: "85.5%", width:'100%', backgroundColor:'#36393F'}} hidden={tabVal!==4}>
-                    <Profile currUser={app.state.currentUser} app={app} history={history}/>
+                    <Profile currUser={app.state.currentUser} app={app} history={history} passcode={passcode} origEmail={origEmail}/>
                 </div>
                 <div style={{width:'100%'}}>
                     <BottomNavigation
