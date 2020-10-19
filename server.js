@@ -338,25 +338,6 @@ app.post('/upload', upload, (req, res)=>{
         Body: req.file.buffer
     }
 
-    /*User.findOne({username: req.session.username}).then(user => {
-        if(user){
-            const params2 = {
-                Bucket: process.env.AWS_BUCKET_NAME,
-                Key: user.profilePic
-            }
-            
-            s3.deleteObject(params2, (err, data)=>{
-                if (err) {
-                    console.log(err)
-                }
-            })
-        }
-    })
-    .catch(err => {
-        console.log(err);
-    })*/
-
-
     s3.upload(params, (err, data)=>{
 
         if (err) {
