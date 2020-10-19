@@ -1,4 +1,8 @@
+import { createBrowserHistory } from "history";
+import { Redirect } from "react-router-dom";
+
 const bcrypt = require('bcryptjs');
+const history = createBrowserHistory();
 
 export const login = (info, app) => {
 
@@ -110,6 +114,8 @@ export const signUp = async (info, app) => {
             console.log(err);
         })
 
+    history.push('/');
+    window.location.reload(false);
 
 }
 

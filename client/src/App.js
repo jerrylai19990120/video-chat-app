@@ -62,7 +62,7 @@ class App extends React.Component{
       <div className="App">
         <BrowserRouter>
           <Switch>
-            <Route path="/signup" component={()=> <SignUp app={this}/>}/>
+            <Route path="/signup/newuser" component={()=> <SignUp app={this}/>}/>
             <Route path="/home/room/:roomID" component={()=> <Room app={this}/>} />
             <Route path="/chat/:roomID" component={()=>{return Chat(useHistory(), this, this.state.username, this.state.email)}}/>
             <Route path='/home' component={()=>{if(!this.state.currentUser){useHistory().push('/')}else{return CreateRoom(useHistory(), this, this.state.username, this.state.email)}}}/>
