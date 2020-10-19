@@ -338,7 +338,7 @@ app.post('/upload', upload, (req, res)=>{
         Body: req.file.buffer
     }
 
-    User.findOne({username: req.session.username}).then(user => {
+    /*User.findOne({username: req.session.username}).then(user => {
         if(user){
             const params2 = {
                 Bucket: process.env.AWS_BUCKET_NAME,
@@ -354,7 +354,7 @@ app.post('/upload', upload, (req, res)=>{
     })
     .catch(err => {
         console.log(err);
-    })
+    })*/
 
 
     s3.upload(params, (err, data)=>{
