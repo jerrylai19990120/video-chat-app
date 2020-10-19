@@ -333,7 +333,7 @@ app.post('/upload', upload, (req, res)=>{
     const fileType = myFile[myFile.length - 1];
 
     const params = {
-        Bucket: process.env.AWS_BUCKET_NAME,
+        Bucket: "my-web-app-db",
         Key: `${req.session.username}.${fileType}`,
         Body: req.file.buffer
     }
