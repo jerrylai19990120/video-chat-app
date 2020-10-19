@@ -44,7 +44,7 @@ class Login extends React.Component{
                             <Button variant="contained" color="primary" style={{width:"28%", height:'4vh', marginTop:'2vh'}} onClick={()=>{login(this, this.props.app)}}>
                                 Log in
                             </Button><br/><br/>
-                            <span style={{color:'#6F6F6F'}}>or <a href="/signUp" style={{textDecoration:'none', color:'#67C7C1'}}><strong>Sign up</strong></a> to join our community.</span>
+                            <span style={{color:'#6F6F6F'}}>or <a href="/signup" style={{textDecoration:'none', color:'#67C7C1'}}><strong>Sign up</strong></a> to join our community.</span>
                         </form>
                     </div>
                     
