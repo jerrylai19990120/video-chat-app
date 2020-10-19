@@ -24,6 +24,7 @@
     "react-scripts": "^3.4.3",
     "shortid": "^2.2.15",
     "socket.io-client": "^2.3.0",
+    "surge": "^0.21.6",
     "uuid": "^8.2.0"
   },
   "scripts": {
